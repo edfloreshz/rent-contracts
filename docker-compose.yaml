@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: rent_contracts
+      POSTGRES_DB: rent-contracts
     ports:
       - "5432:5432"
     volumes:
@@ -32,7 +32,7 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
-      DB_NAME: rent_contracts
+      DB_NAME: rent-contracts
       DB_SSLMODE: disable
       PORT: 8080
       GIN_MODE: release

@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"github.com/edfloreshz/rent-contracts/src/database"
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
 
@@ -10,10 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type AddressService struct{}
+type AddressService struct {
+	db *gorm.DB
+}
 
-func NewAddressService() *AddressService {
-	return &AddressService{}
+func NewAddressService(db *gorm.DB) *AddressService {
+	return &AddressService{
+		db,
+	}
 }
 
 func (s *AddressService) CreateAddress(req *dto.CreateAddressRequest) (*models.Address, error) {
@@ -28,7 +31,7 @@ func (s *AddressService) CreateAddress(req *dto.CreateAddressRequest) (*models.A
 		Country:      req.Country,
 	}
 
-	if err := database.DB.Create(address).Error; err != nil {
+	if err := s.db.Create(address).Error; err != nil {
 		return nil, err
 	}
 
@@ -37,7 +40,7 @@ func (s *AddressService) CreateAddress(req *dto.CreateAddressRequest) (*models.A
 
 func (s *AddressService) GetAddressByID(id uuid.UUID) (*models.Address, error) {
 	var address models.Address
-	if err := database.DB.First(&address, id).Error; err != nil {
+	if err := s.db.First(&address, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("address not found")
 		}
@@ -48,7 +51,7 @@ func (s *AddressService) GetAddressByID(id uuid.UUID) (*models.Address, error) {
 
 func (s *AddressService) GetAllAddresses() ([]models.Address, error) {
 	var addresses []models.Address
-	if err := database.DB.Find(&addresses).Error; err != nil {
+	if err := s.db.Find(&addresses).Error; err != nil {
 		return nil, err
 	}
 	return addresses, nil
@@ -56,7 +59,7 @@ func (s *AddressService) GetAllAddresses() ([]models.Address, error) {
 
 func (s *AddressService) UpdateAddress(id uuid.UUID, req *dto.UpdateAddressRequest) (*models.Address, error) {
 	var address models.Address
-	if err := database.DB.First(&address, id).Error; err != nil {
+	if err := s.db.First(&address, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("address not found")
 		}
@@ -89,7 +92,7 @@ func (s *AddressService) UpdateAddress(id uuid.UUID, req *dto.UpdateAddressReque
 		address.Country = *req.Country
 	}
 
-	if err := database.DB.Save(&address).Error; err != nil {
+	if err := s.db.Save(&address).Error; err != nil {
 		return nil, err
 	}
 
@@ -97,7 +100,7 @@ func (s *AddressService) UpdateAddress(id uuid.UUID, req *dto.UpdateAddressReque
 }
 
 func (s *AddressService) DeleteAddress(id uuid.UUID) error {
-	if err := database.DB.Delete(&models.Address{}, id).Error; err != nil {
+	if err := s.db.Delete(&models.Address{}, id).Error; err != nil {
 		return err
 	}
 	return nil

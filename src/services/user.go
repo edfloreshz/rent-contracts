@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"github.com/edfloreshz/rent-contracts/src/database"
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
 
@@ -10,10 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserService struct{}
+type UserService struct {
+	db *gorm.DB
+}
 
-func NewUserService() *UserService {
-	return &UserService{}
+func NewUserService(db *gorm.DB) *UserService {
+	return &UserService{
+		db,
+	}
 }
 
 func (s *UserService) CreateUser(req *dto.CreateUserRequest) (*models.User, error) {
@@ -27,7 +30,7 @@ func (s *UserService) CreateUser(req *dto.CreateUserRequest) (*models.User, erro
 		Phone:      req.Phone,
 	}
 
-	if err := database.DB.Create(user).Error; err != nil {
+	if err := s.db.Create(user).Error; err != nil {
 		return nil, err
 	}
 
@@ -36,7 +39,7 @@ func (s *UserService) CreateUser(req *dto.CreateUserRequest) (*models.User, erro
 
 func (s *UserService) GetUserByID(id uuid.UUID) (*models.User, error) {
 	var user models.User
-	if err := database.DB.Preload("Address").First(&user, id).Error; err != nil {
+	if err := s.db.Preload("Address").First(&user, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("user not found")
 		}
@@ -47,7 +50,7 @@ func (s *UserService) GetUserByID(id uuid.UUID) (*models.User, error) {
 
 func (s *UserService) GetAllUsers() ([]models.User, error) {
 	var users []models.User
-	if err := database.DB.Preload("Address").Find(&users).Error; err != nil {
+	if err := s.db.Preload("Address").Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return users, nil
@@ -55,7 +58,7 @@ func (s *UserService) GetAllUsers() ([]models.User, error) {
 
 func (s *UserService) GetUsersByType(userType string) ([]models.User, error) {
 	var users []models.User
-	if err := database.DB.Preload("Address").Where("type = ?", userType).Find(&users).Error; err != nil {
+	if err := s.db.Preload("Address").Where("type = ?", userType).Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return users, nil
@@ -63,7 +66,7 @@ func (s *UserService) GetUsersByType(userType string) ([]models.User, error) {
 
 func (s *UserService) UpdateUser(id uuid.UUID, req *dto.UpdateUserRequest) (*models.User, error) {
 	var user models.User
-	if err := database.DB.First(&user, id).Error; err != nil {
+	if err := s.db.First(&user, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("user not found")
 		}
@@ -93,7 +96,7 @@ func (s *UserService) UpdateUser(id uuid.UUID, req *dto.UpdateUserRequest) (*mod
 		user.Phone = *req.Phone
 	}
 
-	if err := database.DB.Save(&user).Error; err != nil {
+	if err := s.db.Save(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -101,7 +104,7 @@ func (s *UserService) UpdateUser(id uuid.UUID, req *dto.UpdateUserRequest) (*mod
 }
 
 func (s *UserService) DeleteUser(id uuid.UUID) error {
-	if err := database.DB.Delete(&models.User{}, id).Error; err != nil {
+	if err := s.db.Delete(&models.User{}, id).Error; err != nil {
 		return err
 	}
 	return nil

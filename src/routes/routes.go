@@ -3,24 +3,25 @@ package routes
 import (
 	"fmt"
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
-	handlers2 "github.com/edfloreshz/rent-contracts/src/handlers"
-	services2 "github.com/edfloreshz/rent-contracts/src/services"
+	handlers "github.com/edfloreshz/rent-contracts/src/handlers"
+	services "github.com/edfloreshz/rent-contracts/src/services"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
-func SetupRoutes() *gin.Engine {
+func Router(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
 
 	// Initialize services
-	addressService := services2.NewAddressService()
-	userService := services2.NewUserService()
-	contractService := services2.NewContractService()
+	addressService := services.NewAddressService(db)
+	userService := services.NewUserService(db)
+	contractService := services.NewContractService(db)
 
 	// Initialize handlers
-	addressHandler := handlers2.NewAddressHandler(addressService)
-	userHandler := handlers2.NewUserHandler(userService)
-	contractHandler := handlers2.NewContractHandler(contractService)
+	addressHandler := handlers.NewAddressHandler(addressService)
+	userHandler := handlers.NewUserHandler(userService)
+	contractHandler := handlers.NewContractHandler(contractService)
 
 	// API v1 routes
 	v1 := router.Group("/api/v1")

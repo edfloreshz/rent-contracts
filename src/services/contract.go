@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"github.com/edfloreshz/rent-contracts/src/database"
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	models2 "github.com/edfloreshz/rent-contracts/src/models"
 
@@ -10,10 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type ContractService struct{}
+type ContractService struct {
+	db *gorm.DB
+}
 
-func NewContractService() *ContractService {
-	return &ContractService{}
+func NewContractService(db *gorm.DB) *ContractService {
+	return &ContractService{
+		db,
+	}
 }
 
 func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*models2.Contract, error) {
@@ -23,7 +26,7 @@ func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*model
 	}
 
 	// Start transaction
-	tx := database.DB.Begin()
+	tx := s.db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
@@ -55,7 +58,7 @@ func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*model
 
 func (s *ContractService) GetContractByID(id uuid.UUID) (*models2.Contract, error) {
 	var contract models2.Contract
-	if err := database.DB.
+	if err := s.db.
 		Preload("CurrentVersion").
 		Preload("Tenant").
 		Preload("Address").
@@ -72,7 +75,7 @@ func (s *ContractService) GetContractByID(id uuid.UUID) (*models2.Contract, erro
 
 func (s *ContractService) GetAllContracts() ([]models2.Contract, error) {
 	var contracts []models2.Contract
-	if err := database.DB.
+	if err := s.db.
 		Preload("CurrentVersion").
 		Preload("Tenant").
 		Preload("Address").
@@ -84,7 +87,7 @@ func (s *ContractService) GetAllContracts() ([]models2.Contract, error) {
 
 func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models2.Contract, error) {
 	var contracts []models2.Contract
-	if err := database.DB.
+	if err := s.db.
 		Preload("CurrentVersion").
 		Preload("Tenant").
 		Preload("Address").
@@ -97,7 +100,7 @@ func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models2.Co
 
 func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRequest) (*models2.Contract, error) {
 	var contract models2.Contract
-	if err := database.DB.First(&contract, id).Error; err != nil {
+	if err := s.db.First(&contract, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("contract not found")
 		}
@@ -112,14 +115,14 @@ func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRe
 		contract.AddressID = *req.AddressID
 	}
 
-	if err := database.DB.Save(&contract).Error; err != nil {
+	if err := s.db.Save(&contract).Error; err != nil {
 		return nil, err
 	}
 
 	// Handle references update
 	if req.ReferenceIDs != nil {
 		// Remove existing references
-		if err := database.DB.Where("contract_id = ?", contract.ID).Delete(&models2.ContractReference{}).Error; err != nil {
+		if err := s.db.Where("contract_id = ?", contract.ID).Delete(&models2.ContractReference{}).Error; err != nil {
 			return nil, err
 		}
 
@@ -129,7 +132,7 @@ func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRe
 				ContractID:  contract.ID,
 				ReferenceID: refID,
 			}
-			if err := database.DB.Create(contractRef).Error; err != nil {
+			if err := s.db.Create(contractRef).Error; err != nil {
 				return nil, err
 			}
 		}
@@ -139,7 +142,7 @@ func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRe
 }
 
 func (s *ContractService) DeleteContract(id uuid.UUID) error {
-	if err := database.DB.Delete(&models2.Contract{}, id).Error; err != nil {
+	if err := s.db.Delete(&models2.Contract{}, id).Error; err != nil {
 		return err
 	}
 	return nil
@@ -148,7 +151,7 @@ func (s *ContractService) DeleteContract(id uuid.UUID) error {
 func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRequest) (*models2.ContractVersion, error) {
 	// Get next version number
 	var maxVersion int
-	database.DB.Model(&models2.ContractVersion{}).
+	s.db.Model(&models2.ContractVersion{}).
 		Where("contract_id = ?", req.ContractID).
 		Select("COALESCE(MAX(version_number), 0)").
 		Scan(&maxVersion)
@@ -168,7 +171,7 @@ func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRe
 		SpecialTerms:           req.SpecialTerms,
 	}
 
-	if err := database.DB.Create(version).Error; err != nil {
+	if err := s.db.Create(version).Error; err != nil {
 		return nil, err
 	}
 
@@ -177,7 +180,7 @@ func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRe
 
 func (s *ContractService) GetContractVersionByID(id uuid.UUID) (*models2.ContractVersion, error) {
 	var version models2.ContractVersion
-	if err := database.DB.First(&version, id).Error; err != nil {
+	if err := s.db.First(&version, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("contract version not found")
 		}
@@ -188,7 +191,7 @@ func (s *ContractService) GetContractVersionByID(id uuid.UUID) (*models2.Contrac
 
 func (s *ContractService) GetContractVersionsByContractID(contractID uuid.UUID) ([]models2.ContractVersion, error) {
 	var versions []models2.ContractVersion
-	if err := database.DB.Where("contract_id = ?", contractID).Order("version_number DESC").Find(&versions).Error; err != nil {
+	if err := s.db.Where("contract_id = ?", contractID).Order("version_number DESC").Find(&versions).Error; err != nil {
 		return nil, err
 	}
 	return versions, nil
