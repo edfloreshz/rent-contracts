@@ -26,7 +26,7 @@ type User struct {
 	Phone      string         `json:"phone" gorm:"not null"`
 	CreatedAt  time.Time      `json:"createdAt" gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt  *time.Time     `json:"updatedAt"`
-	DeletedAt  gorm.DeletedAt `json:"deletedAt" gorm:"index"`
+	DeletedAt  gorm.DeletedAt `json:"deletedAt" gorm:"column:deletedAt;index"`
 
 	// Relationships
 	Address Address `json:"address" gorm:"foreignKey:AddressID"`

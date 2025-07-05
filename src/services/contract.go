@@ -2,10 +2,10 @@ package services
 
 import (
 	"errors"
+	"github.com/edfloreshz/rent-contracts/src/database"
+	"github.com/edfloreshz/rent-contracts/src/dto"
+	models2 "github.com/edfloreshz/rent-contracts/src/models"
 
-	"github.com/edfloreshz/rent-contracts/database"
-	"github.com/edfloreshz/rent-contracts/dto"
-	"github.com/edfloreshz/rent-contracts/models"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -16,8 +16,8 @@ func NewContractService() *ContractService {
 	return &ContractService{}
 }
 
-func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*models.Contract, error) {
-	contract := &models.Contract{
+func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*models2.Contract, error) {
+	contract := &models2.Contract{
 		TenantID:  req.TenantID,
 		AddressID: req.AddressID,
 	}
@@ -38,7 +38,7 @@ func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*model
 	// Add references if provided
 	if len(req.ReferenceIDs) > 0 {
 		for _, refID := range req.ReferenceIDs {
-			contractRef := &models.ContractReference{
+			contractRef := &models2.ContractReference{
 				ContractID:  contract.ID,
 				ReferenceID: refID,
 			}
@@ -53,8 +53,8 @@ func (s *ContractService) CreateContract(req *dto.CreateContractRequest) (*model
 	return contract, nil
 }
 
-func (s *ContractService) GetContractByID(id uuid.UUID) (*models.Contract, error) {
-	var contract models.Contract
+func (s *ContractService) GetContractByID(id uuid.UUID) (*models2.Contract, error) {
+	var contract models2.Contract
 	if err := database.DB.
 		Preload("CurrentVersion").
 		Preload("Tenant").
@@ -70,8 +70,8 @@ func (s *ContractService) GetContractByID(id uuid.UUID) (*models.Contract, error
 	return &contract, nil
 }
 
-func (s *ContractService) GetAllContracts() ([]models.Contract, error) {
-	var contracts []models.Contract
+func (s *ContractService) GetAllContracts() ([]models2.Contract, error) {
+	var contracts []models2.Contract
 	if err := database.DB.
 		Preload("CurrentVersion").
 		Preload("Tenant").
@@ -82,8 +82,8 @@ func (s *ContractService) GetAllContracts() ([]models.Contract, error) {
 	return contracts, nil
 }
 
-func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models.Contract, error) {
-	var contracts []models.Contract
+func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models2.Contract, error) {
+	var contracts []models2.Contract
 	if err := database.DB.
 		Preload("CurrentVersion").
 		Preload("Tenant").
@@ -95,8 +95,8 @@ func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models.Con
 	return contracts, nil
 }
 
-func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRequest) (*models.Contract, error) {
-	var contract models.Contract
+func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRequest) (*models2.Contract, error) {
+	var contract models2.Contract
 	if err := database.DB.First(&contract, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("contract not found")
@@ -119,13 +119,13 @@ func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRe
 	// Handle references update
 	if req.ReferenceIDs != nil {
 		// Remove existing references
-		if err := database.DB.Where("contract_id = ?", contract.ID).Delete(&models.ContractReference{}).Error; err != nil {
+		if err := database.DB.Where("contract_id = ?", contract.ID).Delete(&models2.ContractReference{}).Error; err != nil {
 			return nil, err
 		}
 
 		// Add new references
 		for _, refID := range req.ReferenceIDs {
-			contractRef := &models.ContractReference{
+			contractRef := &models2.ContractReference{
 				ContractID:  contract.ID,
 				ReferenceID: refID,
 			}
@@ -139,29 +139,29 @@ func (s *ContractService) UpdateContract(id uuid.UUID, req *dto.UpdateContractRe
 }
 
 func (s *ContractService) DeleteContract(id uuid.UUID) error {
-	if err := database.DB.Delete(&models.Contract{}, id).Error; err != nil {
+	if err := database.DB.Delete(&models2.Contract{}, id).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRequest) (*models.ContractVersion, error) {
+func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRequest) (*models2.ContractVersion, error) {
 	// Get next version number
 	var maxVersion int
-	database.DB.Model(&models.ContractVersion{}).
+	database.DB.Model(&models2.ContractVersion{}).
 		Where("contract_id = ?", req.ContractID).
 		Select("COALESCE(MAX(version_number), 0)").
 		Scan(&maxVersion)
 
-	version := &models.ContractVersion{
+	version := &models2.ContractVersion{
 		ContractID:             req.ContractID,
 		VersionNumber:          maxVersion + 1,
 		Deposit:                req.Deposit,
 		Rent:                   req.Rent,
 		RentIncreasePercentage: req.RentIncreasePercentage,
 		Business:               req.Business,
-		Status:                 models.ContractStatus(req.Status),
-		Type:                   models.ContractType(req.Type),
+		Status:                 models2.ContractStatus(req.Status),
+		Type:                   models2.ContractType(req.Type),
 		StartDate:              req.StartDate,
 		EndDate:                req.EndDate,
 		RenewalDate:            req.RenewalDate,
@@ -175,8 +175,8 @@ func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRe
 	return version, nil
 }
 
-func (s *ContractService) GetContractVersionByID(id uuid.UUID) (*models.ContractVersion, error) {
-	var version models.ContractVersion
+func (s *ContractService) GetContractVersionByID(id uuid.UUID) (*models2.ContractVersion, error) {
+	var version models2.ContractVersion
 	if err := database.DB.First(&version, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("contract version not found")
@@ -186,8 +186,8 @@ func (s *ContractService) GetContractVersionByID(id uuid.UUID) (*models.Contract
 	return &version, nil
 }
 
-func (s *ContractService) GetContractVersionsByContractID(contractID uuid.UUID) ([]models.ContractVersion, error) {
-	var versions []models.ContractVersion
+func (s *ContractService) GetContractVersionsByContractID(contractID uuid.UUID) ([]models2.ContractVersion, error) {
+	var versions []models2.ContractVersion
 	if err := database.DB.Where("contract_id = ?", contractID).Order("version_number DESC").Find(&versions).Error; err != nil {
 		return nil, err
 	}

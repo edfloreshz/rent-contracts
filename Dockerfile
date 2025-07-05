@@ -4,14 +4,15 @@ FROM golang:1.23-alpine AS builder
 WORKDIR /app
 
 # Copy go mod files
-COPY go.mod go.sum ./
+COPY go.mod go.sum openapi.yaml ./
 RUN go mod download
 
 # Copy source code
-COPY . .
+COPY src/ ./src/
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+WORKDIR /app/src
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /app/main main.go
 
 # Final stage
 FROM alpine:latest
@@ -23,6 +24,7 @@ WORKDIR /root/
 
 # Copy the binary from builder stage
 COPY --from=builder /app/main .
+COPY --from=builder /app/openapi.yaml .
 
 # Expose port
 EXPOSE 8080

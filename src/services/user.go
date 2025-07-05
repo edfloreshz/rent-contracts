@@ -2,10 +2,10 @@ package services
 
 import (
 	"errors"
+	"github.com/edfloreshz/rent-contracts/src/database"
+	"github.com/edfloreshz/rent-contracts/src/dto"
+	"github.com/edfloreshz/rent-contracts/src/models"
 
-	"github.com/edfloreshz/rent-contracts/database"
-	"github.com/edfloreshz/rent-contracts/dto"
-	"github.com/edfloreshz/rent-contracts/models"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )

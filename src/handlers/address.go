@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"github.com/edfloreshz/rent-contracts/src/dto"
+	"github.com/edfloreshz/rent-contracts/src/services"
 	"net/http"
 	"time"
 
-	"github.com/edfloreshz/rent-contracts/dto"
-	"github.com/edfloreshz/rent-contracts/services"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )

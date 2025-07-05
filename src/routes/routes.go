@@ -1,23 +1,26 @@
 package routes
 
 import (
-	"github.com/edfloreshz/rent-contracts/handlers"
-	"github.com/edfloreshz/rent-contracts/services"
+	"fmt"
+	"github.com/MarceloPetrucio/go-scalar-api-reference"
+	handlers2 "github.com/edfloreshz/rent-contracts/src/handlers"
+	services2 "github.com/edfloreshz/rent-contracts/src/services"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func SetupRoutes() *gin.Engine {
 	router := gin.Default()
 
 	// Initialize services
-	addressService := services.NewAddressService()
-	userService := services.NewUserService()
-	contractService := services.NewContractService()
+	addressService := services2.NewAddressService()
+	userService := services2.NewUserService()
+	contractService := services2.NewContractService()
 
 	// Initialize handlers
-	addressHandler := handlers.NewAddressHandler(addressService)
-	userHandler := handlers.NewUserHandler(userService)
-	contractHandler := handlers.NewContractHandler(contractService)
+	addressHandler := handlers2.NewAddressHandler(addressService)
+	userHandler := handlers2.NewUserHandler(userService)
+	contractHandler := handlers2.NewContractHandler(contractService)
 
 	// API v1 routes
 	v1 := router.Group("/api/v1")
@@ -53,16 +56,33 @@ func SetupRoutes() *gin.Engine {
 
 			// Contract version routes
 			contracts.POST("/versions", contractHandler.CreateContractVersion)
-			contracts.GET("/:contractId/versions", contractHandler.GetContractVersions)
+			contracts.GET("/:id/versions", contractHandler.GetContractVersions)
 		}
 	}
 
 	// Health check endpoint
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"status":  "ok",
-			"message": "Rent Contracts API is running",
+			"healthy": true,
 		})
+	})
+
+	router.GET("/scalar", func(c *gin.Context) {
+		htmlContent, err := scalar.ApiReferenceHTML(&scalar.Options{
+			SpecURL: "openapi.yaml",
+			CustomOptions: scalar.CustomOptions{
+				PageTitle: "Rent Contracts API Reference",
+			},
+			DarkMode: true,
+		})
+
+		if err != nil {
+			fmt.Printf("%v", err)
+			c.String(http.StatusInternalServerError, "Error generating API reference")
+			return
+		}
+
+		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
 	})
 
 	return router

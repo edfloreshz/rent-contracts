@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/edfloreshz/rent-contracts/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -33,17 +32,17 @@ func Connect() {
 	}
 
 	// Auto-migrate the schema (optional - you already have init.sql)
-	err = database.AutoMigrate(
-		&models.Address{},
-		&models.User{},
-		&models.Contract{},
-		&models.ContractVersion{},
-		&models.ContractReference{},
-	)
+	//err = database.AutoMigrate(
+	//	&models.Address{},
+	//	&models.User{},
+	//	&models.Contract{},
+	//	&models.ContractVersion{},
+	//	&models.ContractReference{},
+	//)
 
-	if err != nil {
-		log.Fatal("Failed to migrate database: ", err)
-	}
+	//if err != nil {
+	//	log.Fatal("Failed to migrate database: ", err)
+	//}
 
 	DB = database
 	log.Println("Connected to database successfully")

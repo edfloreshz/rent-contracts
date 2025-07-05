@@ -1,11 +1,10 @@
 package main
 
 import (
+	"github.com/edfloreshz/rent-contracts/src/database"
+	"github.com/edfloreshz/rent-contracts/src/routes"
 	"log"
 	"os"
-
-	"github.com/edfloreshz/rent-contracts/database"
-	"github.com/edfloreshz/rent-contracts/routes"
 )
 
 func main() {

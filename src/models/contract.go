@@ -27,7 +27,7 @@ type Contract struct {
 	AddressID        uuid.UUID      `json:"addressId" gorm:"type:uuid;not null"`
 	CreatedAt        time.Time      `json:"createdAt" gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt        *time.Time     `json:"updatedAt"`
-	DeletedAt        gorm.DeletedAt `json:"deletedAt" gorm:"index"`
+	DeletedAt        gorm.DeletedAt `json:"deletedAt" gorm:"column:deletedAt;index"`
 
 	// Relationships
 	CurrentVersion *ContractVersion  `json:"currentVersion" gorm:"foreignKey:CurrentVersionID"`

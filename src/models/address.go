@@ -27,7 +27,7 @@ type Address struct {
 	Country      string         `json:"country" gorm:"not null"`
 	CreatedAt    time.Time      `json:"createdAt" gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt    *time.Time     `json:"updatedAt"`
-	DeletedAt    gorm.DeletedAt `json:"deletedAt" gorm:"index"`
+	DeletedAt    gorm.DeletedAt `json:"deletedAt" gorm:"column:deletedAt;index"`
 }
 
 func (Address) TableName() string {

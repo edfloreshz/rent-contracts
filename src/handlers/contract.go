@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	dto2 "github.com/edfloreshz/rent-contracts/src/dto"
+	models2 "github.com/edfloreshz/rent-contracts/src/models"
+	"github.com/edfloreshz/rent-contracts/src/services"
 	"net/http"
 	"time"
 
-	"github.com/edfloreshz/rent-contracts/dto"
-	"github.com/edfloreshz/rent-contracts/models"
-	"github.com/edfloreshz/rent-contracts/services"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -22,7 +22,7 @@ func NewContractHandler(contractService *services.ContractService) *ContractHand
 }
 
 func (h *ContractHandler) CreateContract(c *gin.Context) {
-	var req dto.CreateContractRequest
+	var req dto2.CreateContractRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -34,7 +34,7 @@ func (h *ContractHandler) CreateContract(c *gin.Context) {
 		return
 	}
 
-	response := &dto.ContractResponse{
+	response := &dto2.ContractResponse{
 		ID:               contract.ID,
 		CurrentVersionID: contract.CurrentVersionID,
 		TenantID:         contract.TenantID,
@@ -70,7 +70,7 @@ func (h *ContractHandler) GetContract(c *gin.Context) {
 
 func (h *ContractHandler) GetAllContracts(c *gin.Context) {
 	tenantIDStr := c.Query("tenantId")
-	var contracts []models.Contract
+	var contracts []models2.Contract
 	var err error
 
 	if tenantIDStr != "" {
@@ -89,7 +89,7 @@ func (h *ContractHandler) GetAllContracts(c *gin.Context) {
 		return
 	}
 
-	var responses []dto.ContractResponse
+	var responses []dto2.ContractResponse
 	for _, contract := range contracts {
 		response := h.buildContractResponse(&contract)
 		responses = append(responses, *response)
@@ -106,7 +106,7 @@ func (h *ContractHandler) UpdateContract(c *gin.Context) {
 		return
 	}
 
-	var req dto.UpdateContractRequest
+	var req dto2.UpdateContractRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -140,7 +140,7 @@ func (h *ContractHandler) DeleteContract(c *gin.Context) {
 }
 
 func (h *ContractHandler) CreateContractVersion(c *gin.Context) {
-	var req dto.CreateContractVersionRequest
+	var req dto2.CreateContractVersionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -157,7 +157,7 @@ func (h *ContractHandler) CreateContractVersion(c *gin.Context) {
 }
 
 func (h *ContractHandler) GetContractVersions(c *gin.Context) {
-	contractIDStr := c.Param("contractId")
+	contractIDStr := c.Param("id")
 	contractID, err := uuid.Parse(contractIDStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid contract UUID"})
@@ -170,7 +170,7 @@ func (h *ContractHandler) GetContractVersions(c *gin.Context) {
 		return
 	}
 
-	var responses []dto.ContractVersionResponse
+	var responses []dto2.ContractVersionResponse
 	for _, version := range versions {
 		response := h.buildContractVersionResponse(&version)
 		responses = append(responses, *response)
@@ -179,8 +179,8 @@ func (h *ContractHandler) GetContractVersions(c *gin.Context) {
 	c.JSON(http.StatusOK, responses)
 }
 
-func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.ContractResponse {
-	response := &dto.ContractResponse{
+func (h *ContractHandler) buildContractResponse(contract *models2.Contract) *dto2.ContractResponse {
+	response := &dto2.ContractResponse{
 		ID:               contract.ID,
 		CurrentVersionID: contract.CurrentVersionID,
 		TenantID:         contract.TenantID,
@@ -200,7 +200,7 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 
 	// Include tenant if loaded
 	if contract.Tenant.ID != uuid.Nil {
-		response.Tenant = &dto.UserResponse{
+		response.Tenant = &dto2.UserResponse{
 			ID:         contract.Tenant.ID,
 			Type:       string(contract.Tenant.Type),
 			AddressID:  contract.Tenant.AddressID,
@@ -215,7 +215,7 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 
 	// Include address if loaded
 	if contract.Address.ID != uuid.Nil {
-		response.Address = &dto.AddressResponse{
+		response.Address = &dto2.AddressResponse{
 			ID:           contract.Address.ID,
 			Type:         string(contract.Address.Type),
 			Street:       contract.Address.Street,
@@ -240,7 +240,7 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 	// Include references if loaded
 	if len(contract.References) > 0 {
 		for _, reference := range contract.References {
-			referenceResponse := &dto.UserResponse{
+			referenceResponse := &dto2.UserResponse{
 				ID:         reference.ID,
 				Type:       string(reference.Type),
 				AddressID:  reference.AddressID,
@@ -258,8 +258,8 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 	return response
 }
 
-func (h *ContractHandler) buildContractVersionResponse(version *models.ContractVersion) *dto.ContractVersionResponse {
-	response := &dto.ContractVersionResponse{
+func (h *ContractHandler) buildContractVersionResponse(version *models2.ContractVersion) *dto2.ContractVersionResponse {
+	response := &dto2.ContractVersionResponse{
 		ID:                     version.ID,
 		ContractID:             version.ContractID,
 		VersionNumber:          version.VersionNumber,

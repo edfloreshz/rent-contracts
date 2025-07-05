@@ -134,7 +134,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     UPDATE "contracts" 
     SET "currentVersionId" = NEW.id, "updatedAt" = CURRENT_TIMESTAMP
-    WHERE id = NEW.contractId;
+    WHERE id = NEW."contractId";
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -169,3 +169,30 @@ FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 CREATE TRIGGER set_current_version
 AFTER INSERT ON "contractVersions"
 FOR EACH ROW EXECUTE FUNCTION update_contract_current_version();
+
+-- Addresses
+INSERT INTO "addresses" ("id", "type", "street", "number", "neighborhood", "city", "state", "zipCode", "country") VALUES
+                                                                                                                      ('11111111-1111-1111-1111-111111111111', 'property', 'Calle Principal', '123', 'Centro', 'Metrópolis', 'CA', '90001', 'México'),
+                                                                                                                      ('22222222-2222-2222-2222-222222222222', 'tenant', 'Calle Olmo', '456', 'Norte', 'Metrópolis', 'CA', '90002', 'México'),
+                                                                                                                      ('33333333-3333-3333-3333-333333333333', 'reference', 'Calle Roble', '789', 'Sur', 'Metrópolis', 'CA', '90003', 'México');
+
+-- Users
+INSERT INTO "users" ("id", "type", "addressId", "firstName", "middleName", "lastName", "email", "phone") VALUES
+                                                                                                             ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'admin', '11111111-1111-1111-1111-111111111111', 'Alicia', NULL, 'Flores', 'alicia.admin@example.com', '+525511223344'),
+                                                                                                             ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'tenant', '22222222-2222-2222-2222-222222222222', 'Roberto', 'B.', 'García', 'roberto.inquilino@example.com', '+525511223345'),
+                                                                                                             ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'reference', '33333333-3333-3333-3333-333333333333', 'Carlos', NULL, 'López', 'carlos.referencia@example.com', '+525511223346');
+
+-- Contracts
+INSERT INTO "contracts" ("id", "tenantId", "addressId") VALUES
+    ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111');
+
+-- Contract Versions
+INSERT INTO "contractVersions" ("id", "contractId", "versionNumber", "deposit", "rent", "rentIncreasePercentage", "business", "status", "type", "startDate", "endDate") VALUES
+    ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 1, 1000, 1500, 5, 'Negocio A', 'active', 'yearly', '2025-01-01', '2025-12-31');
+
+-- Update contract to set currentVersionId
+UPDATE "contracts" SET "currentVersionId" = 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee' WHERE "id" = 'dddddddd-dddd-dddd-dddd-dddddddddddd';
+
+-- Contract References
+INSERT INTO "contractReferences" ("contractId", "referenceId") VALUES
+    ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'cccccccc-cccc-cccc-cccc-cccccccccccc');
