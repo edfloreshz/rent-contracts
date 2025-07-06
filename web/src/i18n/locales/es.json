@@ -27,7 +27,7 @@
         "tenants": "Inquilinos",
         "contracts": "Contratos",
         "addresses": "Direcciones",
-        "guarantors": "Referencias"
+        "references": "Referencias"
     },
     "dashboard": {
         "title": "Panel de Control",
@@ -36,7 +36,7 @@
             "totalTenants": "Total de Inquilinos",
             "activeContracts": "Contratos Activos",
             "totalProperties": "Total de Propiedades",
-            "totalGuarantors": "Total de Referencias"
+            "totalReferences": "Total de Referencias"
         },
         "monthlyRevenue": "Ingresos Mensuales",
         "fromContracts": "De {{count}} contratos activos",
@@ -77,10 +77,10 @@
         "endDate": "Fecha de Fin",
         "status": "Estado",
         "type": "Tipo",
-        "guarantors": "Referencias",
+        "references": "Referencias",
         "selectTenant": "Seleccione un inquilino",
         "selectProperty": "Seleccione una propiedad",
-        "selectGuarantors": "Seleccione referencias",
+        "selectReferences": "Seleccione referencias",
         "tenantRequired": "El inquilino es obligatorio",
         "propertyRequired": "La propiedad es obligatoria",
         "rentRequired": "El alquiler es obligatorio",
@@ -137,18 +137,18 @@
             "reference": "Direcciones de Referencias"
         }
     },
-    "guarantors": {
+    "references": {
         "title": "Referencias",
         "subtitle": "Gestione referencias de contratos",
-        "addGuarantor": "Agregar Referencia",
-        "editGuarantor": "Editar Referencia",
-        "addNewGuarantor": "Agregar Nueva Referencia",
+        "addReference": "Agregar Referencia",
+        "editReference": "Editar Referencia",
+        "addNewReference": "Agregar Nueva Referencia",
         "confirmDelete": "¿Está seguro de que desea eliminar esta referencia?",
         "nameRequired": "El nombre es obligatorio",
         "emailRequired": "El correo electrónico es obligatorio",
         "phoneRequired": "El teléfono es obligatorio",
         "addressRequired": "La dirección es obligatoria",
         "selectAddress": "Seleccione una dirección",
-        "noGuarantors": "No se encontraron referencias"
+        "noReferences": "No se encontraron referencias"
     }
 }

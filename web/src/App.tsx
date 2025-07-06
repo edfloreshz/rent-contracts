@@ -6,7 +6,7 @@ import Dashboard from './components/Dashboard';
 import Tenants from './components/Tenants';
 import Contracts from './components/Contracts';
 import Addresses from './components/Addresses';
-import Guarantors from './components/Guarantors';
+import References from './components/References';
 import './App.css';
 
 const queryClient = new QueryClient({
@@ -32,7 +32,7 @@ function App() {
               <Route path="/tenants" element={<Tenants />} />
               <Route path="/contracts" element={<Contracts />} />
               <Route path="/addresses" element={<Addresses />} />
-              <Route path="/guarantors" element={<Guarantors />} />
+              <Route path="/references" element={<References />} />
             </Routes>
           </Layout>
         </Router>

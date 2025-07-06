@@ -50,7 +50,7 @@ export interface Tenant extends User {
 }
 
 // Deprecated: Use User with type "reference" instead
-export interface Guarantor extends User {
+export interface Reference extends User {
     type: "reference";
 }
 
@@ -127,7 +127,7 @@ export interface CreateAddress {
     type: AddressType;
 }
 
-export interface CreateGuarantor extends CreateUser {
+export interface CreateReference extends CreateUser {
     type: "reference";
 }
 
@@ -180,7 +180,7 @@ export interface UpdateAddress {
     type?: AddressType;
 }
 
-export interface UpdateGuarantor extends UpdateUser {
+export interface UpdateReference extends UpdateUser {
     type?: "reference";
 }
 

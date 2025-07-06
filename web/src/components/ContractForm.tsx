@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTenants, usePropertyAddresses, useGuarantors, useUsers, useCreateContract, useUpdateContract, useCreateContractVersion } from '../hooks/api';
+import { useTenants, usePropertyAddresses, useReferences, useUsers, useCreateContract, useUpdateContract, useCreateContractVersion } from '../hooks/api';
 import type { Contract, CreateContract, UpdateContract, CreateContractVersion } from '../types';
 import { ContractStatus, ContractType } from '../types';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
     const { t } = useTranslation();
     const { data: tenants = [] } = useTenants();
     const { data: addresses = [] } = usePropertyAddresses();
-    const { data: guarantors = [] } = useGuarantors();
+    const { data: references = [] } = useReferences();
     const { data: landlords = [] } = useUsers("admin");
     const createContract = useCreateContract();
     const updateContract = useUpdateContract();
@@ -341,18 +341,18 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {t('contracts.guarantors')}
+                            {t('contracts.references')}
                         </label>
                         <div className="space-y-2 max-h-32 overflow-y-auto">
-                            {guarantors.map((guarantor) => (
-                                <label key={guarantor.id} className="flex items-center">
+                            {references.map((reference) => (
+                                <label key={reference.id} className="flex items-center">
                                     <input
                                         type="checkbox"
-                                        value={guarantor.id}
+                                        value={reference.id}
                                         {...register('referenceIds')}
                                         className="mr-2"
                                     />
-                                    <span className="text-sm">{guarantor.firstName} {guarantor.middleName && `${guarantor.middleName} `}{guarantor.lastName} - {guarantor.email}</span>
+                                    <span className="text-sm">{reference.firstName} {reference.middleName && `${reference.middleName} `}{reference.lastName} - {reference.email}</span>
                                 </label>
                             ))}
                         </div>

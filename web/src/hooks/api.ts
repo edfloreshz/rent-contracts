@@ -114,48 +114,48 @@ export const useDeleteTenant = () => {
     });
 };
 
-// Guarantor hooks
-export const useGuarantors = () => {
+// Reference hooks
+export const useReferences = () => {
     return useQuery({
-        queryKey: ["guarantors"],
-        queryFn: apiService.getGuarantors,
+        queryKey: ["references"],
+        queryFn: apiService.getReferences,
     });
 };
 
-export const useGuarantor = (id: string) => {
+export const useReference = (id: string) => {
     return useQuery({
-        queryKey: ["guarantor", id],
-        queryFn: () => apiService.getGuarantor(id),
+        queryKey: ["reference", id],
+        queryFn: () => apiService.getReference(id),
         enabled: !!id,
     });
 };
 
-export const useCreateGuarantor = () => {
+export const useCreateReference = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: apiService.createGuarantor,
+        mutationFn: apiService.createReference,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["guarantors"] });
+            queryClient.invalidateQueries({ queryKey: ["references"] });
         },
     });
 };
 
-export const useUpdateGuarantor = () => {
+export const useUpdateReference = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: apiService.updateGuarantor,
+        mutationFn: apiService.updateReference,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["guarantors"] });
+            queryClient.invalidateQueries({ queryKey: ["references"] });
         },
     });
 };
 
-export const useDeleteGuarantor = () => {
+export const useDeleteReference = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: apiService.deleteGuarantor,
+        mutationFn: apiService.deleteReference,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["guarantors"] });
+            queryClient.invalidateQueries({ queryKey: ["references"] });
         },
     });
 };
@@ -235,7 +235,7 @@ export const useCreateUser = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
             queryClient.invalidateQueries({ queryKey: ["tenants"] });
-            queryClient.invalidateQueries({ queryKey: ["guarantors"] });
+            queryClient.invalidateQueries({ queryKey: ["references"] });
         },
     });
 };
@@ -247,7 +247,7 @@ export const useUpdateUser = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
             queryClient.invalidateQueries({ queryKey: ["tenants"] });
-            queryClient.invalidateQueries({ queryKey: ["guarantors"] });
+            queryClient.invalidateQueries({ queryKey: ["references"] });
         },
     });
 };
@@ -259,7 +259,7 @@ export const useDeleteUser = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
             queryClient.invalidateQueries({ queryKey: ["tenants"] });
-            queryClient.invalidateQueries({ queryKey: ["guarantors"] });
+            queryClient.invalidateQueries({ queryKey: ["references"] });
         },
     });
 };

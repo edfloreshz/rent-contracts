@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
         { name: t('navigation.tenants'), href: '/tenants', icon: '👥' },
         { name: t('navigation.contracts'), href: '/contracts', icon: '📋' },
         { name: t('navigation.addresses'), href: '/addresses', icon: '🏠' },
-        { name: t('navigation.guarantors'), href: '/guarantors', icon: '🤝' },
+        { name: t('navigation.references'), href: '/references', icon: '🤝' },
     ];
 
     return (

@@ -1,4 +1,4 @@
-import { useContracts, useTenants, useAddresses, useGuarantors } from '../hooks/api';
+import { useContracts, useTenants, useAddresses, useReferences } from '../hooks/api';
 import { ContractStatus } from '../types';
 import type { Contract } from '../types';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ export default function Dashboard() {
     const { data: contracts = [] } = useContracts();
     const { data: tenants = [] } = useTenants();
     const { data: addresses = [] } = useAddresses();
-    const { data: guarantors = [] } = useGuarantors();
+    const { data: references = [] } = useReferences();
 
     const activeContracts = contracts.filter((c: Contract) => c.currentVersion?.status === ContractStatus.Active);
     const totalRent = activeContracts.reduce((sum: number, contract: Contract) => sum + contract.currentVersion!.rent, 0);
@@ -33,8 +33,8 @@ export default function Dashboard() {
             color: 'bg-purple-500',
         },
         {
-            name: t('dashboard.stats.totalGuarantors'),
-            value: guarantors.length,
+            name: t('dashboard.stats.totalReferences'),
+            value: references.length,
             icon: '🤝',
             color: 'bg-orange-500',
         },

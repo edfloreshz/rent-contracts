@@ -5,15 +5,15 @@ import type {
     CreateAddress,
     CreateContract,
     CreateContractVersion,
-    CreateGuarantor,
+    CreateReference,
     CreateTenant,
     CreateUser,
-    Guarantor,
+    Reference,
     Tenant,
     UpdateAddress,
     UpdateContract,
     UpdateContractVersion,
-    UpdateGuarantor,
+    UpdateReference,
     UpdateTenant,
     UpdateUser,
     User,
@@ -283,24 +283,24 @@ class ApiService {
         return this.deleteUser(id);
     };
 
-    // Guarantor endpoints (wrapper around user endpoints)
-    getGuarantors = (): Promise<Guarantor[]> => {
-        return this.getUsers("reference") as Promise<Guarantor[]>;
+    // Reference endpoints (wrapper around user endpoints)
+    getReferences = (): Promise<Reference[]> => {
+        return this.getUsers("reference") as Promise<Reference[]>;
     };
 
-    getGuarantor = (id: string): Promise<Guarantor> => {
-        return this.getUser(id) as Promise<Guarantor>;
+    getReference = (id: string): Promise<Reference> => {
+        return this.getUser(id) as Promise<Reference>;
     };
 
-    createGuarantor = (guarantor: CreateGuarantor): Promise<Guarantor> => {
-        return this.createUser(guarantor) as Promise<Guarantor>;
+    createReference = (reference: CreateReference): Promise<Reference> => {
+        return this.createUser(reference) as Promise<Reference>;
     };
 
-    updateGuarantor = (guarantor: UpdateGuarantor): Promise<Guarantor> => {
-        return this.updateUser(guarantor) as Promise<Guarantor>;
+    updateReference = (reference: UpdateReference): Promise<Reference> => {
+        return this.updateUser(reference) as Promise<Reference>;
     };
 
-    deleteGuarantor = (id: string): Promise<void> => {
+    deleteReference = (id: string): Promise<void> => {
         return this.deleteUser(id);
     };
 

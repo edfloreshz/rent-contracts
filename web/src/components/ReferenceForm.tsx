@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useReferenceAddresses, useCreateGuarantor, useUpdateGuarantor } from '../hooks/api';
-import type { Guarantor, CreateGuarantor, UpdateGuarantor } from '../types';
+import { useReferenceAddresses, useCreateReference, useUpdateReference } from '../hooks/api';
+import type { Reference, CreateReference, UpdateReference } from '../types';
 import { useTranslation } from 'react-i18next';
 
-interface GuarantorFormProps {
-    guarantor?: Guarantor | null;
+interface ReferenceFormProps {
+    reference?: Reference | null;
     onClose: () => void;
 }
 
@@ -18,53 +18,53 @@ interface FormData {
     addressId: string;
 }
 
-export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps) {
+export default function ReferenceForm({ reference, onClose }: ReferenceFormProps) {
     const { t } = useTranslation();
     const { data: addresses = [] } = useReferenceAddresses();
-    const createGuarantor = useCreateGuarantor();
-    const updateGuarantor = useUpdateGuarantor();
+    const createReference = useCreateReference();
+    const updateReference = useUpdateReference();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
         defaultValues: {
-            firstName: guarantor?.firstName || '',
-            middleName: guarantor?.middleName || '',
-            lastName: guarantor?.lastName || '',
-            email: guarantor?.email || '',
-            phone: guarantor?.phone || '',
-            addressId: guarantor?.addressId || '',
+            firstName: reference?.firstName || '',
+            middleName: reference?.middleName || '',
+            lastName: reference?.lastName || '',
+            email: reference?.email || '',
+            phone: reference?.phone || '',
+            addressId: reference?.addressId || '',
         },
     });
 
     useEffect(() => {
-        if (guarantor) {
+        if (reference) {
             reset({
-                firstName: guarantor.firstName,
-                middleName: guarantor.middleName,
-                lastName: guarantor.lastName,
-                email: guarantor.email,
-                phone: guarantor.phone,
-                addressId: guarantor.addressId,
+                firstName: reference.firstName,
+                middleName: reference.middleName,
+                lastName: reference.lastName,
+                email: reference.email,
+                phone: reference.phone,
+                addressId: reference.addressId,
             });
         }
-    }, [guarantor, reset]);
+    }, [reference, reset]);
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
         try {
-            if (guarantor) {
-                const updateData: UpdateGuarantor = {
-                    id: guarantor.id,
+            if (reference) {
+                const updateData: UpdateReference = {
+                    id: reference.id,
                     ...data,
                 };
-                await updateGuarantor.mutateAsync(updateData);
+                await updateReference.mutateAsync(updateData);
             } else {
-                const createData: CreateGuarantor = { ...data, type: "reference" };
-                await createGuarantor.mutateAsync(createData);
+                const createData: CreateReference = { ...data, type: "reference" };
+                await createReference.mutateAsync(createData);
             }
             onClose();
         } catch (error) {
-            console.error('Error saving guarantor:', error);
+            console.error('Error saving reference:', error);
         } finally {
             setIsSubmitting(false);
         }
@@ -74,7 +74,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
                 <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                    {guarantor ? t('guarantors.editGuarantor') : t('guarantors.addNewGuarantor')}
+                    {reference ? t('references.editReference') : t('references.addNewReference')}
                 </h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -84,7 +84,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                         </label>
                         <input
                             type="text"
-                            {...register('firstName', { required: t('guarantors.nameRequired') })}
+                            {...register('firstName', { required: t('references.nameRequired') })}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.firstName && (
@@ -99,7 +99,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                         <input
                             type="email"
                             {...register('email', {
-                                required: t('guarantors.emailRequired'),
+                                required: t('references.emailRequired'),
                                 pattern: {
                                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                     message: t('common.invalidEmail')
@@ -118,7 +118,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                         </label>
                         <input
                             type="tel"
-                            {...register('phone', { required: t('guarantors.phoneRequired') })}
+                            {...register('phone', { required: t('references.phoneRequired') })}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.phone && (
@@ -131,10 +131,10 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                             {t('common.address')}
                         </label>
                         <select
-                            {...register('addressId', { required: t('guarantors.addressRequired') })}
+                            {...register('addressId', { required: t('references.addressRequired') })}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         >
-                            <option value="">{t('guarantors.selectAddress')}</option>
+                            <option value="">{t('references.selectAddress')}</option>
                             {addresses.map((address) => (
                                 <option key={address.id} value={address.id}>
                                     {address.street} {address.number}, {address.city}
@@ -159,7 +159,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                             disabled={isSubmitting}
                             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                         >
-                            {isSubmitting ? t('common.loading') : (guarantor ? t('common.update') : t('common.create'))}
+                            {isSubmitting ? t('common.loading') : (reference ? t('common.update') : t('common.create'))}
                         </button>
                     </div>
                 </form>
