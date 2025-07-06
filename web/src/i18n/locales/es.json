@@ -87,6 +87,9 @@
         "endDate": "Fecha de Fin",
         "status": "Estado",
         "type": "Tipo",
+        "landlord": "Arrendador",
+        "landlordRequired": "El arrendador es obligatorio",
+        "selectLandlord": "Seleccione un arrendador",
         "references": "Referencias",
         "selectTenant": "Seleccione un inquilino",
         "selectProperty": "Seleccione una propiedad",
@@ -110,8 +113,8 @@
             "Yearly": "Anual"
         },
         "versions": {
-            "title": "Versiones del Contrato",
             "version": "Versión",
+            "current": "Actual",
             "rentIncrease": "Aumento de Renta",
             "specialTerms": "Términos Especiales",
             "createdAt": "Creado el",

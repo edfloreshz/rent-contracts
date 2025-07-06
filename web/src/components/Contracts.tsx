@@ -86,7 +86,7 @@ function ContractVersionsTable({ contractId, currentVersionId }: { contractId: s
                                     </span>
                                     {version.id === currentVersionId && (
                                         <span className="ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
-                                            Current
+                                            {t('contracts.versions.current')}
                                         </span>
                                     )}
                                 </div>
@@ -238,6 +238,9 @@ export default function Contracts() {
                                 {t('common.period')}
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                {t('contracts.versions.version')}
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 {t('contracts.status')}
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -265,6 +268,7 @@ export default function Contracts() {
                                             )}
                                         </button>
                                     </td>
+
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                                             {contract.tenant?.firstName} {contract.tenant?.middleName && `${contract.tenant?.middleName} `}{contract.tenant?.lastName}
@@ -300,6 +304,14 @@ export default function Contracts() {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                            v{contract.currentVersion?.versionNumber || 'N/A'}
+                                            <span className="ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                                {t('contracts.versions.current')}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${contract.currentVersion?.status === ContractStatus.Active
                                             ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                                             : contract.currentVersion?.status === ContractStatus.Expired
@@ -309,6 +321,7 @@ export default function Contracts() {
                                             {contract.currentVersion?.status ? t(`contracts.statuses.${contract.currentVersion.status}`) : 'N/A'}
                                         </span>
                                     </td>
+
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <button
                                             onClick={() => handleEdit(contract)}
@@ -332,11 +345,8 @@ export default function Contracts() {
                                 </tr>
                                 {isRowExpanded(contract.id) && (
                                     <tr>
-                                        <td colSpan={8} className="px-6 py-4 bg-gray-50 dark:bg-gray-700">
+                                        <td colSpan={9} className="px-6 py-4 bg-gray-50 dark:bg-gray-700">
                                             <div className="space-y-4">
-                                                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                                    {t('contracts.versions.title')}
-                                                </h4>
                                                 <ContractVersionsTable
                                                     contractId={contract.id}
                                                     currentVersionId={contract.currentVersionId}

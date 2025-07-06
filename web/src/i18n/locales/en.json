@@ -86,6 +86,9 @@
         "endDate": "End Date",
         "status": "Status",
         "type": "Type",
+        "landlord": "Landlord",
+        "landlordRequired": "Landlord is required",
+        "selectLandlord": "Select a landlord",
         "references": "References",
         "selectTenant": "Select a tenant",
         "selectProperty": "Select a property",
@@ -109,8 +112,8 @@
             "Yearly": "Yearly"
         },
         "versions": {
-            "title": "Contract Versions",
             "version": "Version",
+            "current": "Current",
             "rentIncrease": "Rent Increase",
             "specialTerms": "Special Terms",
             "createdAt": "Created At",
