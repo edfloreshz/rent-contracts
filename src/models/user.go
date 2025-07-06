@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -34,4 +35,15 @@ type User struct {
 
 func (User) TableName() string {
 	return "users"
+}
+
+func (u User) FullName() string {
+	if u.MiddleName != nil {
+		return strings.ToUpper(u.FirstName) + " " + strings.ToUpper(*u.MiddleName) + " " + strings.ToUpper(u.LastName)
+	}
+	return strings.ToUpper(u.FirstName) + " " + strings.ToUpper(u.LastName)
+}
+
+func (u User) Reference() string {
+	return u.FullName() + " Cel: " + u.Phone + " " + u.Address.FullAddress()
 }

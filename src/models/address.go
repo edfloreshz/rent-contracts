@@ -33,3 +33,7 @@ type Address struct {
 func (Address) TableName() string {
 	return "addresses"
 }
+
+func (a Address) FullAddress() string {
+	return a.Street + ", " + a.Number + ", " + a.Neighborhood + ", " + a.City + ", " + a.State + ", " + a.ZipCode + ", " + a.Country
+}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
+	"github.com/google/uuid"
 	"github.com/johnfercher/maroto/v2"
 	"github.com/johnfercher/maroto/v2/pkg/components/text"
 	"github.com/johnfercher/maroto/v2/pkg/config"
@@ -12,8 +13,6 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	"github.com/johnfercher/maroto/v2/pkg/consts/pagesize"
 	"github.com/johnfercher/maroto/v2/pkg/props"
-
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -71,9 +70,11 @@ func (s *ContractService) GetContractByID(id uuid.UUID) (*models.Contract, error
 		Preload("CurrentVersion").
 		Preload("Landlord").
 		Preload("Tenant").
+		Preload("Tenant.Address").
 		Preload("Address").
 		Preload("Versions").
 		Preload("References").
+		Preload("References.Address").
 		First(&contract, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("contract not found")
@@ -89,6 +90,7 @@ func (s *ContractService) GetAllContracts() ([]models.Contract, error) {
 		Preload("CurrentVersion").
 		Preload("Landlord").
 		Preload("Tenant").
+		Preload("Tenant.Address").
 		Preload("Address").
 		Find(&contracts).Error; err != nil {
 		return nil, err
@@ -102,6 +104,7 @@ func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models.Con
 		Preload("CurrentVersion").
 		Preload("Landlord").
 		Preload("Tenant").
+		Preload("Tenant.Address").
 		Preload("Address").
 		Where("tenantid = ?", tenantID).
 		Find(&contracts).Error; err != nil {
@@ -218,11 +221,11 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 	}
 
 	cfg := config.NewBuilder().
-		WithPageNumber().
-		WithPageSize(pagesize.Letter).
-		WithLeftMargin(10).
-		WithTopMargin(15).
-		WithRightMargin(10).
+		WithPageSize(pagesize.Legal).
+		WithLeftMargin(12).
+		WithTopMargin(12).
+		WithRightMargin(12).
+		WithBottomMargin(12).
 		Build()
 
 	m := maroto.New(cfg)
@@ -230,12 +233,275 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 	m.AddRows(
 		text.NewRow(10, "CONTRATO DE ARRENDAMIENTO", props.Text{
 			Style: fontstyle.Bold,
+			Size:  14,
 			Align: align.Center,
 		}),
-		text.NewRow(10, fmt.Sprintf("CONTRATO DE ARRENDAMIENTO QUE CELEBRAN POR UNA PARTE: %s", contract.Landlord.FirstName), props.Text{
+
+		text.NewRow(14, fmt.Sprintf(
+			"CONTRATO DE ARRENDAMIENTO QUE CELEBRAN POR UNA PARTE: %s, (PROPIETARIO) QUE EN LO SUCESIVO SERÁ DENOMINADO \"EL ARRENDADOR\" Y POR LA OTRA PARTE: %s QUE EN LO SUCESIVO SERÁ DENOMINADO \"EL ARRENDATARIO\", AL TENOR DE LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:",
+			contract.Landlord.FullName(), contract.Tenant.FullName()),
+			props.Text{
+				VerticalPadding: 1,
+				Size:            7,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(6, "DECLARACIONES", props.Text{
 			Style: fontstyle.Bold,
-			Align: align.Left,
-		}))
+			Size:  8,
+			Align: align.Center,
+		}),
+
+		// Declaration 1
+		text.NewRow(13, fmt.Sprintf(
+			"1.- Declara \"EL ARRENDADOR\" que es el legítimo propietario y se encuentra en posesión del Inmueble ubicado en: %s, que en adelante será llamado \"EL INMUEBLE\", que es su deseo dar en Arrendamiento \"EL INMUEBLE\" bajo los términos y condiciones que se mencionan en el presente contrato.",
+			contract.Address.FullAddress()),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(16, fmt.Sprintf(
+			"2.- \"EL ARRENDATARIO: %s declara que es una persona con capacidad suficiente para obligarse en los términos del presente contrato, y que tiene su domicilio particular en: %s, que es su deseo Arrendar \"EL INMUEBLE\" en los términos y condiciones que se mencionan en este contrato y que recibe de Conformidad \"EL INMUEBLE\" con todas sus instalaciones completas y en servicio a plena satisfacción.",
+			contract.Tenant.FullName(), contract.Tenant.Address.FullAddress()),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(6, "REFERENCIAS", props.Text{
+			Style: fontstyle.Bold,
+			Size:  8,
+			Align: align.Center,
+		}),
+	)
+
+	for i, ref := range contract.References {
+		m.AddRows(
+			text.NewRow(10, fmt.Sprintf("Referencia %d: %s", i+1, ref.Reference()), props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+		)
+	}
+
+	m.AddRows(
+		text.NewRow(6, "CON VIRTUD DE LO MANIFESTADO EN LAS ANTERIORES DECLARACIONES, CONVIENEN SUJETARSE A LAS SIGUIENTES:",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Bold,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(6, "CLÁUSULAS", props.Text{
+			Style: fontstyle.Bold,
+			Size:  8,
+			Align: align.Center,
+		}),
+
+		text.NewRow(4, "PRIMERA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(10, fmt.Sprintf(
+			"\"EL ARRENDADOR\" otorga en arrendamiento el EL INMUEBLE a EL ARRENDATARIO, y éste lo recibe a su entera satisfacción, para local de: %s, en buen estado con todas sus instalaciones funcionando y en servicio.",
+			contract.CurrentVersion.Business),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "SEGUNDA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(14, fmt.Sprintf(
+			"La renta mensual que el ARRENDATARIO deberá pagar a partir del día: %s fecha desde la cual estará vigente este contrato, es la Cantidad de: $%.2f más un mes de Depósito. Quedando en el entendido de que la renta se pagará cada mes, íntegra y puntualmente el día señalado aún cuando el ARRENDATARIO lo ocupe una parte del mes (o incluso si no lo ocupa).",
+			contract.CurrentVersion.StartDate.Format("02 de enero de 2006"), contract.CurrentVersion.Rent),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "TERCERA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(18, fmt.Sprintf(
+			"Queda expresamente pactado que las rentas se incrementarán automáticamente de forma acumulativa en forma anual, ajustándose las mismas a la variación que haya sufrido el Índice Nacional de precios al consumidor que publica el Banco Nacional de México a través del diario oficial de la federación o en el salario mínimo respecto a los últimos doce meses inmediatos anteriores al mes en que deba realizarse el ajuste al precio de la renta, el que sea mayor. El incremento será del %.2f%%.",
+			contract.CurrentVersion.RentIncreasePercentage),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "CUARTA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(28, fmt.Sprintf(
+			"La vigencia del presente contrato será de: %s plazo convenido por ambas partes, a partir del día %s al %s. Al término de dicho plazo de vigencia, EL ARRENDATARIO se obliga a hacer entrega a EL ARRENDADOR el INMUEBLE arrendado, en las condiciones en las cuales lo recibió, todo en buen estado (pisos, paredes, pintura, muebles de baño, cristales, cortinas metálicas etc.) y estando al corriente en todos los pagos de Servicios, tales como Luz (electricidad) y Agua, de los cuales deberá entregar AL ARRENDADOR, los recibos correspondientes totalmente pagados. En caso de que EL ARRENDATARIO no entregará el INMUEBLE a EL ARRENDADOR, al término del presente contrato, EL ARRENDATARIO pagará a EL ARRENDADOR, a partir del siguiente mes por concepto de renta mensual, la cantidad pactada, más un incremento del 6%% mensual por el número de meses que transcurran hasta la firma de renovación del contrato.",
+			contract.CurrentVersion.Type, contract.CurrentVersion.StartDate.Format("02 de enero de 2006"), contract.CurrentVersion.EndDate.Format("02 de enero de 2006")),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "QUINTA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(26, fmt.Sprintf(
+			"A efecto de garantizar todas y cada una de las obligaciones que se derivan del presente contrato, EL ARRENDATARIO hace entrega al momento de la firma del mismo, La Cantidad de $%.2f por concepto de Depósito en garantía. Suma que se obliga EL ARRENDADOR a devolver a EL ARRENDATARIO a más tardar en 7 (siete) días después de la desocupación del INMUEBLE, siempre y cuando EL ARRENDATARIO lo entregue en el mismo estado en que lo recibió, y previa comprobación (con recibos pagados) de que no existe ningún adeudo derivado de los servicios de Luz y Agua potable, quedando aclarado que el mes de depósito, no se utilizará como pago de renta, es única y exclusivamente para garantizar reparaciones o adeudos pendientes del ARRENDATARIO y se regresará después de verificar que no exista ningún pendiente por liquidar.",
+			contract.CurrentVersion.Deposit),
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "RESCISION DE CONTRATO:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(10, "EL ARRENDADOR podrá rescindir el presente Contrato, SIN NECESIDAD DE DECLARACION JUDICIAL, por simple Notificación por escrito, por una o más de las siguientes causas:",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "1.- Si EL ARRENDATARIO se RETRASA en el pago de 1 a 2 meses consecutivos de renta.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "2.- Por causar daños al INMUEBLE.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "3.- Si le son suspendidos al INMUEBLE los servicios de Luz o Agua por falta de pago de parte del ARRENDATARIO.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "4.- Por Subarrendar el INMUEBLE.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "5.- Si el ARRENDATARIO deja de ser solvente.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(6, "6.- Por incumplimiento de cualquiera de las cláusulas del presente contrato.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "SEXTA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(10, "EL ARRENDADOR NO SE HACE responsable por deterioro o pérdida de los bienes muebles que el ARRENDATARIO tenga en el INMUEBLE en cualquiera de los siguientes casos: robo, incendio, terremoto, inundación, etc. ni por lesiones físicas ocasionadas a personas dentro del inmueble.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(4, "SEPTIMA:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+		}),
+
+		text.NewRow(18, "A la fecha del vencimiento del presente contrato, previa a la desocupación del INMUEBLE, EL ARRENDADOR hará una inspección del mismo, para verificar el estado en el que se encuentre, de existir desperfectos causados por EL ARRENDATARIO, éste se obliga a efectuar las reparaciones pertinentes de forma inmediata, de lo contrario EL ARRENDADOR podrá hacerlos con el Depósito en garantía, siempre y cuando cubra el importe total de dichas reparaciones.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Normal,
+				Align:           align.Left,
+			}),
+
+		text.NewRow(14, "IMPORTANTE: En caso de entregar el local antes de la fecha de vencimiento de su contrato, SE PIERDE EL MES DE DEPOSITO y se tiene que entregar el local en las condiciones en que lo recibió, PINTADO Y RESANADO por FUERA Y POR DENTRO en color claro (blanco o beige). Entregar RECIBO DE LUZ dado de BAJA y SIN ADEUDO a la fecha de entrega, y estar al corriente en pago de agua.",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Bold,
+				Align:           align.Left,
+			}),
+
+		// Payment warning
+		text.NewRow(8, "EL DIA DE PAGO ES EL DIA PRIMERO DE CADA MES, EN CASO DE RETRASO EN EL PAGO DE LA RENTA SE COBRARAN $150.00 DE RECARGOS POR MES (A partir del día 3 se cobra el recargo)",
+			props.Text{
+				Size:            8,
+				VerticalPadding: 1,
+				Style:           fontstyle.Bold,
+				Align:           align.Left,
+			}),
+	)
 
 	document, err := m.Generate()
 	if err != nil {

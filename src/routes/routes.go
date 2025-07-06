@@ -3,8 +3,8 @@ package routes
 import (
 	"fmt"
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
-	handlers "github.com/edfloreshz/rent-contracts/src/handlers"
-	services "github.com/edfloreshz/rent-contracts/src/services"
+	"github.com/edfloreshz/rent-contracts/src/handlers"
+	"github.com/edfloreshz/rent-contracts/src/services"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"

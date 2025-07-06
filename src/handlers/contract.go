@@ -212,7 +212,7 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 		response.UpdatedAt = &updatedAt
 	}
 
-	// Include current version if loaded
+	// Include the current version if loaded
 	if contract.CurrentVersion != nil {
 		response.CurrentVersion = h.buildContractVersionResponse(contract.CurrentVersion)
 	}
@@ -247,19 +247,35 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 		}
 	}
 
+	// Include tenant address if loaded
+	if contract.Tenant.Address.ID != uuid.Nil {
+		response.Tenant.Address = &dto.AddressResponse{
+			ID:           contract.Tenant.Address.ID,
+			Type:         string(contract.Tenant.Address.Type),
+			Street:       contract.Tenant.Address.Street,
+			Number:       contract.Tenant.Address.Number,
+			Neighborhood: contract.Tenant.Address.Neighborhood,
+			City:         contract.Tenant.Address.City,
+			State:        contract.Tenant.Address.State,
+			ZipCode:      contract.Tenant.Address.ZipCode,
+			Country:      contract.Tenant.Address.Country,
+			CreatedAt:    contract.Tenant.Address.CreatedAt.Format(time.RFC3339),
+		}
+	}
+
 	// Include address if loaded
 	if contract.Address.ID != uuid.Nil {
 		response.Address = &dto.AddressResponse{
-			ID:           contract.Address.ID,
-			Type:         string(contract.Address.Type),
-			Street:       contract.Address.Street,
-			Number:       contract.Address.Number,
-			Neighborhood: contract.Address.Neighborhood,
-			City:         contract.Address.City,
-			State:        contract.Address.State,
-			ZipCode:      contract.Address.ZipCode,
-			Country:      contract.Address.Country,
-			CreatedAt:    contract.Address.CreatedAt.Format(time.RFC3339),
+			ID:           contract.Tenant.Address.ID,
+			Type:         string(contract.Tenant.Address.Type),
+			Street:       contract.Tenant.Address.Street,
+			Number:       contract.Tenant.Address.Number,
+			Neighborhood: contract.Tenant.Address.Neighborhood,
+			City:         contract.Tenant.Address.City,
+			State:        contract.Tenant.Address.State,
+			ZipCode:      contract.Tenant.Address.ZipCode,
+			Country:      contract.Tenant.Address.Country,
+			CreatedAt:    contract.Tenant.Address.CreatedAt.Format(time.RFC3339),
 		}
 	}
 
