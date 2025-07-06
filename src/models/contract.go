@@ -26,6 +26,7 @@ type Contract struct {
 	LandlordID       uuid.UUID      `json:"landlordId" gorm:"column:landlordid;type:uuid;not null"`
 	TenantID         uuid.UUID      `json:"tenantId" gorm:"column:tenantid;type:uuid;not null"`
 	AddressID        uuid.UUID      `json:"addressId" gorm:"column:addressid;type:uuid;not null"`
+	Deposit          float64        `json:"deposit" gorm:"column:deposit;type:numeric;not null"`
 	CreatedAt        time.Time      `json:"createdAt" gorm:"column:createdat;default:CURRENT_TIMESTAMP"`
 	UpdatedAt        *time.Time     `json:"updatedAt" gorm:"column:updatedat"`
 	DeletedAt        gorm.DeletedAt `json:"deletedAt" gorm:"column:deletedat;index"`

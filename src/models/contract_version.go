@@ -10,7 +10,6 @@ type ContractVersion struct {
 	ID                     uuid.UUID      `json:"id" gorm:"type:uuid;primary_key;default:uuid_generate_v4()"`
 	ContractID             uuid.UUID      `json:"contractId" gorm:"column:contractid;type:uuid;not null"`
 	VersionNumber          int            `json:"versionNumber" gorm:"column:versionnumber;not null"`
-	Deposit                float64        `json:"deposit" gorm:"column:deposit;type:numeric;not null"`
 	Rent                   float64        `json:"rent" gorm:"column:rent;type:numeric;not null"`
 	RentIncreasePercentage float64        `json:"rentIncreasePercentage" gorm:"column:rentincreasepercentage;type:numeric;not null"`
 	Business               string         `json:"business" gorm:"column:business;not null"`

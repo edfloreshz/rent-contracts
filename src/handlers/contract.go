@@ -41,6 +41,7 @@ func (h *ContractHandler) CreateContract(c *gin.Context) {
 		LandlordID:       contract.LandlordID,
 		TenantID:         contract.TenantID,
 		AddressID:        contract.AddressID,
+		Deposit:          contract.Deposit,
 		CreatedAt:        contract.CreatedAt.Format(time.RFC3339),
 	}
 
@@ -217,6 +218,7 @@ func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.
 		LandlordID:       contract.LandlordID,
 		TenantID:         contract.TenantID,
 		AddressID:        contract.AddressID,
+		Deposit:          contract.Deposit,
 		CreatedAt:        contract.CreatedAt.Format(time.RFC3339),
 	}
 
@@ -326,7 +328,6 @@ func (h *ContractHandler) buildContractVersionResponse(version *models.ContractV
 		ID:                     version.ID,
 		ContractID:             version.ContractID,
 		VersionNumber:          version.VersionNumber,
-		Deposit:                version.Deposit,
 		Rent:                   version.Rent,
 		RentIncreasePercentage: version.RentIncreasePercentage,
 		Business:               version.Business,

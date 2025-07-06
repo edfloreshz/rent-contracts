@@ -57,9 +57,6 @@ function ContractVersionsTable({ contractId, currentVersionId }: { contractId: s
                             {t('contracts.rent')}
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                            {t('contracts.deposit')}
-                        </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             {t('contracts.versions.rentIncrease')}
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -94,11 +91,6 @@ function ContractVersionsTable({ contractId, currentVersionId }: { contractId: s
                             <td className="px-4 py-2 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-white">
                                     ${version.rent.toLocaleString()}
-                                </div>
-                            </td>
-                            <td className="px-4 py-2 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-white">
-                                    ${version.deposit.toLocaleString()}
                                 </div>
                             </td>
                             <td className="px-4 py-2 whitespace-nowrap">
@@ -292,7 +284,7 @@ export default function Contracts() {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm text-gray-900 dark:text-white">
-                                            ${contract.currentVersion?.deposit?.toLocaleString() || 'N/A'}
+                                            ${contract.deposit.toLocaleString() || 'N/A'}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">

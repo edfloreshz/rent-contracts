@@ -10,6 +10,7 @@ type CreateContractRequest struct {
 	LandlordID   uuid.UUID   `json:"landlordId" binding:"required"`
 	TenantID     uuid.UUID   `json:"tenantId" binding:"required"`
 	AddressID    uuid.UUID   `json:"addressId" binding:"required"`
+	Deposit      float64     `json:"deposit" binding:"required,min=0"`
 	ReferenceIDs []uuid.UUID `json:"referenceIds,omitempty"`
 }
 
@@ -17,6 +18,7 @@ type UpdateContractRequest struct {
 	LandlordID   *uuid.UUID  `json:"landlordId,omitempty"`
 	TenantID     *uuid.UUID  `json:"tenantId,omitempty"`
 	AddressID    *uuid.UUID  `json:"addressId,omitempty"`
+	Deposit      float64     `json:"deposit" binding:"required,min=0"`
 	ReferenceIDs []uuid.UUID `json:"referenceIds,omitempty"`
 }
 
@@ -26,6 +28,7 @@ type ContractResponse struct {
 	LandlordID       uuid.UUID                 `json:"landlordId"`
 	TenantID         uuid.UUID                 `json:"tenantId"`
 	AddressID        uuid.UUID                 `json:"addressId"`
+	Deposit          float64                   `json:"deposit" binding:"required,min=0"`
 	CreatedAt        string                    `json:"createdAt"`
 	UpdatedAt        *string                   `json:"updatedAt"`
 	CurrentVersion   *ContractVersionResponse  `json:"currentVersion,omitempty"`
@@ -38,7 +41,6 @@ type ContractResponse struct {
 
 type CreateContractVersionRequest struct {
 	ContractID             uuid.UUID  `json:"contractId" binding:"required"`
-	Deposit                float64    `json:"deposit" binding:"required,min=0"`
 	Rent                   float64    `json:"rent" binding:"required,min=0"`
 	RentIncreasePercentage float64    `json:"rentIncreasePercentage" binding:"required,min=0,max=100"`
 	Business               string     `json:"business" binding:"required"`

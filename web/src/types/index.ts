@@ -61,7 +61,6 @@ export interface ContractVersion {
     id: string;
     contractId: string;
     versionNumber: number;
-    deposit: number;
     rent: number;
     rentIncreasePercentage: number;
     business: string;
@@ -80,6 +79,7 @@ export interface Contract {
     landlordId: string;
     tenantId: string;
     addressId: string;
+    deposit: number;
     createdAt: string;
     updatedAt?: string;
     currentVersion?: ContractVersion;
@@ -124,6 +124,7 @@ export interface CreateContract {
     landlordId: string;
     tenantId: string;
     addressId: string;
+    deposit: number;
     referenceIds?: string[];
 }
 
@@ -178,12 +179,12 @@ export interface UpdateContract {
     landlordId?: string;
     tenantId?: string;
     addressId?: string;
+    deposit?: number;
     referenceIds?: string[];
 }
 
 export interface UpdateContractVersion {
     id: string;
-    deposit?: number;
     rent?: number;
     rentIncreasePercentage?: number;
     business?: string;

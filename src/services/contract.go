@@ -179,7 +179,6 @@ func (s *ContractService) CreateContractVersion(req *dto.CreateContractVersionRe
 	version := &models.ContractVersion{
 		ContractID:             req.ContractID,
 		VersionNumber:          maxVersion + 1,
-		Deposit:                req.Deposit,
 		Rent:                   req.Rent,
 		RentIncreasePercentage: req.RentIncreasePercentage,
 		Business:               req.Business,
@@ -434,7 +433,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID, versionID *uuid.UUID
 
 		text.NewRow(26, fmt.Sprintf(
 			"A efecto de garantizar todas y cada una de las obligaciones que se derivan del presente contrato, EL ARRENDATARIO hace entrega al momento de la firma del mismo, La Cantidad de $%.2f por concepto de Depósito en garantía. Suma que se obliga EL ARRENDADOR a devolver a EL ARRENDATARIO a más tardar en 7 (siete) días después de la desocupación del INMUEBLE, siempre y cuando EL ARRENDATARIO lo entregue en el mismo estado en que lo recibió, y previa comprobación (con recibos pagados) de que no existe ningún adeudo derivado de los servicios de Luz y Agua potable, quedando aclarado que el mes de depósito, no se utilizará como pago de renta, es única y exclusivamente para garantizar reparaciones o adeudos pendientes del ARRENDATARIO y se regresará después de verificar que no exista ningún pendiente por liquidar.",
-			targetVersion.Deposit),
+			contract.Deposit),
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
