@@ -7,11 +7,13 @@ import (
 	"github.com/edfloreshz/rent-contracts/src/models"
 	"github.com/google/uuid"
 	"github.com/johnfercher/maroto/v2"
+	"github.com/johnfercher/maroto/v2/pkg/components/row"
 	"github.com/johnfercher/maroto/v2/pkg/components/text"
 	"github.com/johnfercher/maroto/v2/pkg/config"
 	"github.com/johnfercher/maroto/v2/pkg/consts/align"
 	"github.com/johnfercher/maroto/v2/pkg/consts/fontstyle"
 	"github.com/johnfercher/maroto/v2/pkg/consts/pagesize"
+	"github.com/johnfercher/maroto/v2/pkg/core"
 	"github.com/johnfercher/maroto/v2/pkg/props"
 	"gorm.io/gorm"
 )
@@ -281,16 +283,37 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 		}),
 	)
 
-	for i, ref := range contract.References {
-		m.AddRows(
-			text.NewRow(10, fmt.Sprintf("Referencia %d: %s", i+1, ref.Reference()), props.Text{
-				Size:            8,
-				VerticalPadding: 1,
-				Style:           fontstyle.Normal,
-				Align:           align.Left,
-			}),
-		)
+	rows := []core.Row{
+		row.New(4).Add(
+			text.NewCol(4, "Nombre", props.Text{Size: 9, Align: align.Center, Style: fontstyle.Bold, Color: &props.WhiteColor}),
+			text.NewCol(2, "Telefono", props.Text{Size: 9, Align: align.Center, Style: fontstyle.Bold, Color: &props.WhiteColor}),
+			text.NewCol(6, "Dirección", props.Text{Size: 9, Align: align.Center, Style: fontstyle.Bold, Color: &props.WhiteColor}),
+		).WithStyle(&props.Cell{BackgroundColor: darkGrayColor()}),
 	}
+
+	var contentsRow []core.Row
+
+	for i, reference := range contract.References {
+		size := 6.
+		if i == len(contract.References)-1 {
+			size = 8.
+		}
+		r := row.New(size).Add(
+			text.NewCol(4, reference.FullName(), props.Text{Size: 8, Top: 1, Align: align.Center}),
+			text.NewCol(2, reference.Phone, props.Text{Size: 8, Top: 1, Align: align.Center}),
+			text.NewCol(6, reference.Address.FullAddress(), props.Text{Size: 8, Top: 1, Align: align.Center}),
+		)
+		if i%2 == 0 {
+			gray := grayColor()
+			r.WithStyle(&props.Cell{BackgroundColor: gray})
+		}
+
+		contentsRow = append(contentsRow, r)
+	}
+
+	rows = append(rows, contentsRow...)
+
+	m.AddRows(rows...)
 
 	m.AddRows(
 		text.NewRow(6, "CON VIRTUD DE LO MANIFESTADO EN LAS ANTERIORES DECLARACIONES, CONVIENEN SUJETARSE A LAS SIGUIENTES:",
@@ -298,7 +321,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 				Size:            8,
 				VerticalPadding: 1,
 				Style:           fontstyle.Bold,
-				Align:           align.Left,
+				Align:           align.Center,
 			}),
 
 		text.NewRow(6, "CLÁUSULAS", props.Text{
@@ -312,6 +335,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(10, fmt.Sprintf(
@@ -329,6 +353,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(14, fmt.Sprintf(
@@ -346,6 +371,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(18, fmt.Sprintf(
@@ -363,6 +389,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(28, fmt.Sprintf(
@@ -380,6 +407,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(26, fmt.Sprintf(
@@ -397,6 +425,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(10, "EL ARRENDADOR podrá rescindir el presente Contrato, SIN NECESIDAD DE DECLARACION JUDICIAL, por simple Notificación por escrito, por una o más de las siguientes causas:",
@@ -460,6 +489,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(10, "EL ARRENDADOR NO SE HACE responsable por deterioro o pérdida de los bienes muebles que el ARRENDATARIO tenga en el INMUEBLE en cualquiera de los siguientes casos: robo, incendio, terremoto, inundación, etc. ni por lesiones físicas ocasionadas a personas dentro del inmueble.",
@@ -475,6 +505,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 			VerticalPadding: 1,
 			Style:           fontstyle.Bold,
 			Align:           align.Left,
+			Color:           &props.RedColor,
 		}),
 
 		text.NewRow(18, "A la fecha del vencimiento del presente contrato, previa a la desocupación del INMUEBLE, EL ARRENDADOR hará una inspección del mismo, para verificar el estado en el que se encuentre, de existir desperfectos causados por EL ARRENDATARIO, éste se obliga a efectuar las reparaciones pertinentes de forma inmediata, de lo contrario EL ARRENDADOR podrá hacerlos con el Depósito en garantía, siempre y cuando cubra el importe total de dichas reparaciones.",
@@ -485,21 +516,31 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 				Align:           align.Left,
 			}),
 
-		text.NewRow(14, "IMPORTANTE: En caso de entregar el local antes de la fecha de vencimiento de su contrato, SE PIERDE EL MES DE DEPOSITO y se tiene que entregar el local en las condiciones en que lo recibió, PINTADO Y RESANADO por FUERA Y POR DENTRO en color claro (blanco o beige). Entregar RECIBO DE LUZ dado de BAJA y SIN ADEUDO a la fecha de entrega, y estar al corriente en pago de agua.",
+		text.NewRow(4, "IMPORTANTE:", props.Text{
+			Size:            8,
+			VerticalPadding: 1,
+			Style:           fontstyle.Bold,
+			Align:           align.Left,
+			Color:           &props.RedColor,
+		}),
+
+		text.NewRow(14, "En caso de entregar el local antes de la fecha de vencimiento de su contrato, SE PIERDE EL MES DE DEPOSITO y se tiene que entregar el local en las condiciones en que lo recibió, PINTADO Y RESANADO por FUERA Y POR DENTRO en color claro (blanco o beige). Entregar RECIBO DE LUZ dado de BAJA y SIN ADEUDO a la fecha de entrega, y estar al corriente en pago de agua.",
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
-				Style:           fontstyle.Bold,
+				Style:           fontstyle.Normal,
 				Align:           align.Left,
+				Color:           &props.BlueColor,
 			}),
 
 		// Payment warning
-		text.NewRow(8, "EL DIA DE PAGO ES EL DIA PRIMERO DE CADA MES, EN CASO DE RETRASO EN EL PAGO DE LA RENTA SE COBRARAN $150.00 DE RECARGOS POR MES (A partir del día 3 se cobra el recargo)",
+		text.NewRow(8, "LA RENTA SE PAGA EL DIA PRIMERO DE CADA MES, A PARTIR DEL DIA 3 SE COBRARAN $150.00 DE RECARGOS POR PAGO TARDIO.",
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
 				Style:           fontstyle.Bold,
 				Align:           align.Left,
+				Color:           &props.RedColor,
 			}),
 	)
 
@@ -509,4 +550,20 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 	}
 
 	return document.GetBytes(), nil
+}
+
+func darkGrayColor() *props.Color {
+	return &props.Color{
+		Red:   55,
+		Green: 55,
+		Blue:  55,
+	}
+}
+
+func grayColor() *props.Color {
+	return &props.Color{
+		Red:   200,
+		Green: 200,
+		Blue:  200,
+	}
 }
