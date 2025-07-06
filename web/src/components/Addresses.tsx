@@ -3,6 +3,7 @@ import { useAddresses, useDeleteAddress, useTenantAddresses, usePropertyAddresse
 import type { Address } from '../types';
 import { AddressType } from '../types';
 import AddressForm from './AddressForm';
+import MapPreview from './MapPreview';
 import { useTranslation } from 'react-i18next';
 
 export default function Addresses() {
@@ -126,49 +127,47 @@ export default function Addresses() {
             {addresses && addresses.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {addresses.map((address: Address) => (
-                        <div key={address.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="flex-1">
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {address.street} {address.number}
-                                    </h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">
-                                        {address.neighborhood}
-                                    </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">
-                                        {address.city}, {address.state} {address.zipCode}
-                                    </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">
-                                        {address.country}
-                                    </p>
-                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-2 ${address.type === AddressType.Property
-                                        ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-                                        : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-                                        }`}>
-                                        {t(`addresses.types.${address.type}`)}
-                                    </span>
-                                </div>
-                                <div className="flex space-x-2">
-                                    <button
-                                        onClick={() => handleEdit(address)}
-                                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
-                                    >
-                                        {t('common.edit')}
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(address.id)}
-                                        className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
-                                    >
-                                        {t('common.delete')}
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="mb-4">
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
-                                    {t('navigation.contracts')}: {address.contracts?.length || 0}
-                                </div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">
-                                    {t('tenants.createdAt')}: {new Date(address.createdAt).toLocaleDateString()}
+                        <div key={address.id} className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                            {/* Map Preview */}
+                            <MapPreview address={address} className="w-full" />
+
+                            {/* Address Content */}
+                            <div className="p-6">
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="flex-1">
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {address.street} {address.number}
+                                        </h3>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                                            {address.neighborhood}
+                                        </p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                                            {address.city}, {address.state} {address.zipCode}
+                                        </p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                                            {address.country}
+                                        </p>
+                                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-2 ${address.type === AddressType.Property
+                                            ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                                            : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                                            }`}>
+                                            {t(`addresses.types.${address.type}`)}
+                                        </span>
+                                    </div>
+                                    <div className="flex space-x-2">
+                                        <button
+                                            onClick={() => handleEdit(address)}
+                                            className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
+                                        >
+                                            {t('common.edit')}
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(address.id)}
+                                            className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
+                                        >
+                                            {t('common.delete')}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
