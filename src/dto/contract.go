@@ -7,12 +7,14 @@ import (
 )
 
 type CreateContractRequest struct {
+	LandlordID   uuid.UUID   `json:"landlordId" binding:"required"`
 	TenantID     uuid.UUID   `json:"tenantId" binding:"required"`
 	AddressID    uuid.UUID   `json:"addressId" binding:"required"`
 	ReferenceIDs []uuid.UUID `json:"referenceIds,omitempty"`
 }
 
 type UpdateContractRequest struct {
+	LandlordID   *uuid.UUID  `json:"landlordId,omitempty"`
 	TenantID     *uuid.UUID  `json:"tenantId,omitempty"`
 	AddressID    *uuid.UUID  `json:"addressId,omitempty"`
 	ReferenceIDs []uuid.UUID `json:"referenceIds,omitempty"`
@@ -21,11 +23,13 @@ type UpdateContractRequest struct {
 type ContractResponse struct {
 	ID               uuid.UUID                 `json:"id"`
 	CurrentVersionID *uuid.UUID                `json:"currentVersionId"`
+	LandlordID       uuid.UUID                 `json:"landlordId"`
 	TenantID         uuid.UUID                 `json:"tenantId"`
 	AddressID        uuid.UUID                 `json:"addressId"`
 	CreatedAt        string                    `json:"createdAt"`
 	UpdatedAt        *string                   `json:"updatedAt"`
 	CurrentVersion   *ContractVersionResponse  `json:"currentVersion,omitempty"`
+	Landlord         *UserResponse             `json:"landlord,omitempty"`
 	Tenant           *UserResponse             `json:"tenant,omitempty"`
 	Address          *AddressResponse          `json:"address,omitempty"`
 	Versions         []ContractVersionResponse `json:"versions,omitempty"`

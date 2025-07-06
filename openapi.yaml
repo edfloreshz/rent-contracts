@@ -13,6 +13,12 @@ paths:
       responses:
         '200':
           description: List of addresses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressResponse'
     post:
       tags: [Addresses]
       summary: Create a new address
@@ -25,6 +31,10 @@ paths:
       responses:
         '201':
           description: Address created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressResponse'
   /api/v1/addresses/{id}:
     get:
       tags: [Addresses]
@@ -35,9 +45,16 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '200':
           description: Address found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressResponse'
+        '404':
+          description: Address not found
     put:
       tags: [Addresses]
       summary: Update address
@@ -47,6 +64,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -56,6 +74,10 @@ paths:
       responses:
         '200':
           description: Address updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressResponse'
     delete:
       tags: [Addresses]
       summary: Delete address
@@ -65,6 +87,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '204':
           description: Address deleted
@@ -75,6 +98,12 @@ paths:
       responses:
         '200':
           description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
     post:
       tags: [Users]
       summary: Create a new user
@@ -87,6 +116,10 @@ paths:
       responses:
         '201':
           description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
   /api/v1/users/{id}:
     get:
       tags: [Users]
@@ -97,9 +130,16 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '200':
           description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
     put:
       tags: [Users]
       summary: Update user
@@ -109,6 +149,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -118,6 +159,10 @@ paths:
       responses:
         '200':
           description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
     delete:
       tags: [Users]
       summary: Delete user
@@ -127,6 +172,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '204':
           description: User deleted
@@ -134,9 +180,23 @@ paths:
     get:
       tags: [Contracts]
       summary: Get all contracts
+      parameters:
+        - in: query
+          name: tenantId
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: Filter contracts by tenant ID
       responses:
         '200':
           description: List of contracts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContractResponse'
     post:
       tags: [Contracts]
       summary: Create a new contract
@@ -149,6 +209,10 @@ paths:
       responses:
         '201':
           description: Contract created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractResponse'
   /api/v1/contracts/{id}:
     get:
       tags: [Contracts]
@@ -159,9 +223,16 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '200':
           description: Contract found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractResponse'
+        '404':
+          description: Contract not found
     put:
       tags: [Contracts]
       summary: Update contract
@@ -171,6 +242,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -180,6 +252,10 @@ paths:
       responses:
         '200':
           description: Contract updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractResponse'
     delete:
       tags: [Contracts]
       summary: Delete contract
@@ -189,9 +265,59 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '204':
           description: Contract deleted
+  /api/v1/contracts/{id}/document:
+    get:
+      tags: [Contracts]
+      summary: Get contract document as PDF
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Contract ID
+      responses:
+        '200':
+          description: Contract document PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid contract UUID
+        '500':
+          description: Error generating document
+  /api/v1/contracts/{id}/versions:
+    get:
+      tags: [Contract Versions]
+      summary: Get all versions of a contract
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Contract ID
+      responses:
+        '200':
+          description: List of contract versions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContractVersionResponse'
+        '400':
+          description: Invalid contract UUID
+        '500':
+          description: Internal server error
   /api/v1/contracts/versions:
     post:
       tags: [Contract Versions]
@@ -205,26 +331,32 @@ paths:
       responses:
         '201':
           description: Contract version created
-  /api/v1/contracts/{id}/versions:
-    get:
-      tags: [Contract Versions]
-      summary: Get contract versions by contract ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: List of contract versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractVersionResponse'
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+
 components:
   schemas:
     AddressInput:
       type: object
+      required:
+        - type
+        - street
+        - number
+        - neighborhood
+        - city
+        - state
+        - zipCode
+        - country
       properties:
         type:
           type: string
+          enum: [residential, commercial]
         street:
           type: string
         number:
@@ -239,13 +371,53 @@ components:
           type: string
         country:
           type: string
+
+    AddressResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [residential, commercial]
+        street:
+          type: string
+        number:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+        country:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
     UserInput:
       type: object
+      required:
+        - type
+        - addressId
+        - firstName
+        - lastName
+        - email
+        - phone
       properties:
         type:
           type: string
+          enum: [tenant, landlord]
         addressId:
           type: string
+          format: uuid
         firstName:
           type: string
         middleName:
@@ -254,33 +426,100 @@ components:
           type: string
         email:
           type: string
+          format: email
         phone:
           type: string
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [tenant, landlord]
+        addressId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
     ContractInput:
       type: object
+      required:
+        - tenantId
+        - addressId
       properties:
         tenantId:
           type: string
+          format: uuid
         addressId:
           type: string
+          format: uuid
+
+    ContractResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        currentVersionId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        addressId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        currentVersion:
+          $ref: '#/components/schemas/ContractVersionResponse'
+        tenant:
+          $ref: '#/components/schemas/UserResponse'
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContractVersionResponse'
+
     ContractVersionInput:
       type: object
+      required:
+        - contractId
+        - version
+        - startDate
+        - endDate
+        - monthlyRent
+        - depositAmount
+        - terms
       properties:
         contractId:
           type: string
-        versionNumber:
-          type: integer
-        deposit:
-          type: number
-        rent:
-          type: number
-        rentIncreasePercentage:
-          type: number
-        business:
-          type: string
-        status:
-          type: string
-        type:
+          format: uuid
+        version:
           type: string
         startDate:
           type: string
@@ -288,8 +527,43 @@ components:
         endDate:
           type: string
           format: date
-        renewalDate:
+        monthlyRent:
+          type: number
+          format: decimal
+        depositAmount:
+          type: number
+          format: decimal
+        terms:
+          type: string
+
+    ContractVersionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        contractId:
+          type: string
+          format: uuid
+        version:
+          type: string
+        startDate:
           type: string
           format: date
-        specialTerms:
+        endDate:
           type: string
+          format: date
+        monthlyRent:
+          type: number
+          format: decimal
+        depositAmount:
+          type: number
+          format: decimal
+        terms:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

@@ -58,6 +58,9 @@ func Router(db *gorm.DB) *gin.Engine {
 			// Contract version routes
 			contracts.POST("/versions", contractHandler.CreateContractVersion)
 			contracts.GET("/:id/versions", contractHandler.GetContractVersions)
+
+			// Contract document routes
+			contracts.GET("/:id/document", contractHandler.GetContractDocument)
 		}
 	}
 

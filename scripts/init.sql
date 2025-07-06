@@ -56,6 +56,7 @@ CREATE TABLE users (
 CREATE TABLE contracts (
     id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
     currentVersionId UUID,
+    landlordId UUID NOT NULL,
     tenantId UUID NOT NULL,
     addressId UUID NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -100,6 +101,7 @@ ADD CONSTRAINT check_version CHECK (versionNumber > 0);
 ALTER TABLE contracts
 ADD CONSTRAINT fk_contracts_current_version FOREIGN KEY(currentVersionId) REFERENCES contractVersions(id) ON DELETE RESTRICT,
 ADD CONSTRAINT fk_contracts_tenant FOREIGN KEY(tenantId) REFERENCES users(id) ON DELETE RESTRICT,
+ADD CONSTRAINT fk_contracts_landlord FOREIGN KEY(landlordId) REFERENCES users(id) ON DELETE RESTRICT,
 ADD CONSTRAINT fk_contracts_address FOREIGN KEY(addressId) REFERENCES addresses(id) ON DELETE RESTRICT;
 
 ALTER TABLE contractReferences
@@ -110,6 +112,7 @@ ALTER TABLE users
 ADD CONSTRAINT fk_users_address FOREIGN KEY(addressId) REFERENCES addresses(id) ON DELETE RESTRICT;
 
 CREATE INDEX idx_contracts_tenant ON contracts(tenantId) WHERE deletedAt IS NULL;
+CREATE INDEX idx_contracts_landlord ON contracts(landlordId) WHERE deletedAt IS NULL;
 CREATE INDEX idx_contract_versions_status ON contractVersions(status);
 CREATE INDEX idx_contract_versions_dates ON contractVersions(startDate, endDate);
 CREATE INDEX idx_contract_versions_contract_status ON contractVersions(contractId, status);
@@ -183,8 +186,8 @@ INSERT INTO users (id, type, addressId, firstName, middleName, lastName, email, 
                                                                                                              ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'reference', '33333333-3333-3333-3333-333333333333', 'Carlos', NULL, 'López', 'carlos.referencia@example.com', '+525511223346');
 
 -- Contracts
-INSERT INTO contracts (id, tenantId, addressId) VALUES
-    ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111');
+INSERT INTO contracts (id, landlordId, tenantId, addressId) VALUES
+    ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111');
 
 -- Contract Versions
 INSERT INTO contractVersions (id, contractId, versionNumber, deposit, rent, rentIncreasePercentage, business, status, type, startDate, endDate) VALUES
