@@ -107,6 +107,17 @@
         },
         "types": {
             "Yearly": "Yearly"
+        },
+        "versions": {
+            "title": "Contract Versions",
+            "version": "Version",
+            "rentIncrease": "Rent Increase",
+            "specialTerms": "Special Terms",
+            "createdAt": "Created At",
+            "renewalDate": "Renewal Date",
+            "noVersions": "No versions found",
+            "expand": "Expand",
+            "collapse": "Collapse"
         }
     },
     "addresses": {

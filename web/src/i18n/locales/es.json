@@ -108,6 +108,17 @@
         },
         "types": {
             "Yearly": "Anual"
+        },
+        "versions": {
+            "title": "Versiones del Contrato",
+            "version": "Versión",
+            "rentIncrease": "Aumento de Renta",
+            "specialTerms": "Términos Especiales",
+            "createdAt": "Creado el",
+            "renewalDate": "Fecha de Renovación",
+            "noVersions": "No se encontraron versiones",
+            "expand": "Expandir",
+            "collapse": "Contraer"
         }
     },
     "addresses": {
