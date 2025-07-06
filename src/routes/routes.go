@@ -2,14 +2,15 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	"github.com/edfloreshz/rent-contracts/src/handlers"
 	"github.com/edfloreshz/rent-contracts/src/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"net/http"
-	"time"
 )
 
 func Router(db *gorm.DB) *gin.Engine {
@@ -29,11 +30,13 @@ func Router(db *gorm.DB) *gin.Engine {
 	addressService := services.NewAddressService(db)
 	userService := services.NewUserService(db)
 	contractService := services.NewContractService(db)
+	statisticsService := services.NewStatisticsService(db)
 
 	// Initialize handlers
 	addressHandler := handlers.NewAddressHandler(addressService)
 	userHandler := handlers.NewUserHandler(userService)
 	contractHandler := handlers.NewContractHandler(contractService)
+	statisticsHandler := handlers.NewStatisticsHandler(statisticsService)
 
 	// API v1 routes
 	v1 := router.Group("/api/v1")
@@ -73,6 +76,12 @@ func Router(db *gorm.DB) *gin.Engine {
 
 			// Contract document routes
 			contracts.GET("/:id/document", contractHandler.GetContractDocument)
+		}
+
+		// Statistics routes
+		statistics := v1.Group("/statistics")
+		{
+			statistics.GET("/overall", statisticsHandler.GetOverallStatistics)
 		}
 	}
 

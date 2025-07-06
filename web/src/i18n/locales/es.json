@@ -39,12 +39,22 @@
             "totalReferences": "Total de Referencias"
         },
         "monthlyRevenue": "Ingresos Mensuales",
+        "annualRevenue": "Ingresos Anuales",
         "fromContracts": "De {{count}} contratos activos",
         "recentContracts": "Contratos Recientes",
         "tenant": "Inquilino",
         "property": "Propiedad",
         "rent": "Alquiler",
-        "status": "Estado"
+        "status": "Estado",
+        "detailedStatistics": "Estadísticas Detalladas",
+        "averageRent": "Alquiler Promedio",
+        "occupancyRate": "Tasa de Ocupación",
+        "avgContractDays": "Días Promedio de Contrato",
+        "performanceStatistics": "Estadísticas de Rendimiento",
+        "propertyStatistics": "Estadísticas de Propiedades",
+        "occupiedProperties": "Propiedades Ocupadas",
+        "vacantProperties": "Propiedades Vacantes",
+        "activeTenants": "Inquilinos Activos"
     },
     "tenants": {
         "title": "Inquilinos",
@@ -126,9 +136,9 @@
         "noAddresses": "No se encontraron direcciones",
         "fullAddress": "Dirección Completa",
         "types": {
-            "tenant": "Dirección de Inquilino",
-            "property": "Dirección de Propiedad",
-            "reference": "Dirección de Referencia"
+            "tenant": "Inquilino",
+            "property": "Propiedad",
+            "reference": "Referencia"
         },
         "filters": {
             "all": "Todas las Direcciones",

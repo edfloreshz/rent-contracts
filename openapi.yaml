@@ -340,6 +340,21 @@ paths:
         '500':
           description: Internal server error
 
+  /api/v1/statistics/overall:
+    get:
+      tags: [Statistics]
+      summary: Get overall statistics
+      description: Returns overall statistics including total contracts, users, and addresses
+      responses:
+        '200':
+          description: Overall statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OverallStatisticsResponse'
+        '500':
+          description: Internal server error
+
 components:
   schemas:
     AddressInput:
@@ -567,3 +582,53 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    OverallStatisticsResponse:
+      type: object
+      properties:
+        totalContracts:
+          type: integer
+          description: Total number of contracts
+        activeContracts:
+          type: integer
+          description: Number of active contracts
+        expiredContracts:
+          type: integer
+          description: Number of expired contracts
+        totalProperties:
+          type: integer
+          description: Total number of properties
+        occupiedProperties:
+          type: integer
+          description: Number of occupied properties
+        vacantProperties:
+          type: integer
+          description: Number of vacant properties
+        totalTenants:
+          type: integer
+          description: Total number of tenants
+        totalReferences:
+          type: integer
+          description: Total number of references
+        activeTenants:
+          type: integer
+          description: Number of tenants with active contracts
+        monthlyRevenue:
+          type: number
+          format: float
+          description: Total monthly revenue from active contracts
+        averageRent:
+          type: number
+          format: float
+          description: Average rent from active contracts
+        totalRevenue:
+          type: number
+          format: float
+          description: Total estimated annual revenue
+        occupancyRate:
+          type: number
+          format: float
+          description: Occupancy rate as percentage
+        averageContractDuration:
+          type: integer
+          description: Average contract duration in days

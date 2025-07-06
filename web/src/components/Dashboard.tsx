@@ -1,4 +1,4 @@
-import { useContracts, useTenants, useAddresses, useReferences } from '../hooks/api';
+import { useContracts, useOverallStatistics } from '../hooks/api';
 import { ContractStatus } from '../types';
 import type { Contract } from '../types';
 import { useTranslation } from 'react-i18next';
@@ -6,35 +6,30 @@ import { useTranslation } from 'react-i18next';
 export default function Dashboard() {
     const { t } = useTranslation();
     const { data: contracts = [] } = useContracts();
-    const { data: tenants = [] } = useTenants();
-    const { data: addresses = [] } = useAddresses();
-    const { data: references = [] } = useReferences();
-
-    const activeContracts = contracts.filter((c: Contract) => c.currentVersion?.status === ContractStatus.Active);
-    const totalRent = activeContracts.reduce((sum: number, contract: Contract) => sum + contract.currentVersion!.rent, 0);
+    const { data: statistics } = useOverallStatistics();
 
     const stats = [
         {
             name: t('dashboard.stats.totalTenants'),
-            value: tenants.length,
+            value: statistics?.totalTenants || 0,
             icon: '👥',
-            color: 'bg-blue-500',
+            color: 'bg-amber-500',
         },
         {
             name: t('dashboard.stats.activeContracts'),
-            value: activeContracts.length,
+            value: statistics?.activeContracts || 0,
             icon: '📋',
             color: 'bg-green-500',
         },
         {
             name: t('dashboard.stats.totalProperties'),
-            value: addresses.length,
+            value: statistics?.totalProperties || 0,
             icon: '🏠',
             color: 'bg-purple-500',
         },
         {
             name: t('dashboard.stats.totalReferences'),
-            value: references.length,
+            value: statistics?.totalReferences || 0,
             icon: '🤝',
             color: 'bg-orange-500',
         },
@@ -65,16 +60,99 @@ export default function Dashboard() {
                 ))}
             </div>
 
-            {/* Revenue Card */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('dashboard.monthlyRevenue')}</h3>
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                    ${totalRent.toLocaleString()}
+            {/* Comprehensive Statistics */}
+            {statistics && (
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+                        {t('dashboard.detailedStatistics')}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Financial Statistics */}
+                        <div className="text-center">
+                            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                                ${(statistics.monthlyRevenue || 0).toLocaleString()}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-300">
+                                {t('dashboard.monthlyRevenue')}
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                                ${(statistics.totalRevenue || 0).toLocaleString()}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-300">
+                                {t('dashboard.annualRevenue')}
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                                ${(statistics.averageRent || 0).toLocaleString()}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-300">
+                                {t('dashboard.averageRent')}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Performance Statistics */}
+                    <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
+                            {t('dashboard.performanceStatistics')}
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="text-center">
+                                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                                    {(statistics.occupancyRate || 0).toFixed(1)}%
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-300">
+                                    {t('dashboard.occupancyRate')}
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+                                    {statistics.averageContractDuration || 0}
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-300">
+                                    {t('dashboard.avgContractDays')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Property Statistics */}
+                    <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
+                            {t('dashboard.propertyStatistics')}
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="text-center">
+                                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                                    {statistics.occupiedProperties || 0}
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-300">
+                                    {t('dashboard.occupiedProperties')}
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                                    {statistics.vacantProperties || 0}
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-300">
+                                    {t('dashboard.vacantProperties')}
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                                    {statistics.activeTenants || 0}
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-300">
+                                    {t('dashboard.activeTenants')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
-                    {t('dashboard.fromContracts', { count: activeContracts.length })}
-                </p>
-            </div>
+            )}
 
             {/* Recent Contracts */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow">

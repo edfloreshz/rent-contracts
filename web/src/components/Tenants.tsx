@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useTenants, useDeleteTenant } from '../hooks/api';
-import type { Tenant } from '../types';
 import TenantForm from './TenantForm';
 import { useTranslation } from 'react-i18next';
 import { formatPhone } from '../utils';
+import type { User } from '../types';
 
 export default function Tenants() {
     const { t } = useTranslation();
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+    const [selectedTenant, setSelectedTenant] = useState<User | null>(null);
     const { data: tenants = [], isLoading } = useTenants();
     const deleteTenant = useDeleteTenant();
 
-    const handleEdit = (tenant: Tenant) => {
+    const handleEdit = (tenant: User) => {
         setSelectedTenant(tenant);
         setIsFormOpen(true);
     };
@@ -66,15 +66,12 @@ export default function Tenants() {
                                 {t('common.address')}
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                {t('navigation.contracts')}
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 {t('common.actions')}
                             </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        {tenants.map((tenant: Tenant) => (
+                        {tenants.map((tenant: User) => (
                             <tr key={tenant.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900 dark:text-white">
@@ -93,11 +90,6 @@ export default function Tenants() {
                                     </div>
                                     <div className="text-sm text-gray-500 dark:text-gray-400">
                                         {tenant.address.city}, {tenant.address.state}
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-900 dark:text-white">
-                                        {tenant.contracts?.length || 0} {t('navigation.contracts').toLowerCase()}
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

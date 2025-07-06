@@ -288,3 +288,11 @@ export const useContractDocument = () => {
         mutationFn: apiService.getContractDocument,
     });
 };
+
+// Statistics hooks
+export const useOverallStatistics = () => {
+    return useQuery({
+        queryKey: ["statistics", "overall"],
+        queryFn: apiService.getOverallStatistics,
+    });
+};

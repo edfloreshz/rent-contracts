@@ -38,12 +38,22 @@
             "totalReferences": "Total References"
         },
         "monthlyRevenue": "Monthly Revenue",
+        "annualRevenue": "Annual Revenue",
         "fromContracts": "From {{count}} active contracts",
         "recentContracts": "Recent Contracts",
         "tenant": "Tenant",
         "property": "Property",
         "rent": "Rent",
-        "status": "Status"
+        "status": "Status",
+        "detailedStatistics": "Detailed Statistics",
+        "averageRent": "Average Rent",
+        "occupancyRate": "Occupancy Rate",
+        "avgContractDays": "Avg Contract Days",
+        "performanceStatistics": "Performance Statistics",
+        "propertyStatistics": "Property Statistics",
+        "occupiedProperties": "Occupied Properties",
+        "vacantProperties": "Vacant Properties",
+        "activeTenants": "Active Tenants"
     },
     "tenants": {
         "title": "Tenants",
@@ -125,9 +135,9 @@
         "noAddresses": "No addresses found",
         "fullAddress": "Full Address",
         "types": {
-            "tenant": "Tenant Address",
-            "property": "Property Address",
-            "reference": "Reference Address"
+            "tenant": "Tenant",
+            "property": "Property",
+            "reference": "Reference"
         },
         "filters": {
             "all": "All Addresses",

@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	dto2 "github.com/edfloreshz/rent-contracts/src/dto"
-	"github.com/edfloreshz/rent-contracts/src/models"
-	"github.com/edfloreshz/rent-contracts/src/services"
 	"net/http"
 	"time"
+
+	"github.com/edfloreshz/rent-contracts/src/dto"
+	"github.com/edfloreshz/rent-contracts/src/models"
+	"github.com/edfloreshz/rent-contracts/src/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -22,7 +23,7 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var req dto2.CreateUserRequest
+	var req dto.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -34,7 +35,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	response := &dto2.UserResponse{
+	response := &dto.UserResponse{
 		ID:         user.ID,
 		Type:       string(user.Type),
 		AddressID:  user.AddressID,
@@ -68,7 +69,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		return
 	}
 
-	response := &dto2.UserResponse{
+	response := &dto.UserResponse{
 		ID:         user.ID,
 		Type:       string(user.Type),
 		AddressID:  user.AddressID,
@@ -87,7 +88,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 
 	// Include address if loaded
 	if user.Address.ID != uuid.Nil {
-		response.Address = &dto2.AddressResponse{
+		response.Address = &dto.AddressResponse{
 			ID:           user.Address.ID,
 			Type:         string(user.Address.Type),
 			Street:       user.Address.Street,
@@ -120,9 +121,9 @@ func (h *UserHandler) GetAllUsers(c *gin.Context) {
 		return
 	}
 
-	var responses []dto2.UserResponse
+	var responses []dto.UserResponse
 	for _, user := range users {
-		response := dto2.UserResponse{
+		response := dto.UserResponse{
 			ID:         user.ID,
 			Type:       string(user.Type),
 			AddressID:  user.AddressID,
@@ -141,7 +142,7 @@ func (h *UserHandler) GetAllUsers(c *gin.Context) {
 
 		// Include address if loaded
 		if user.Address.ID != uuid.Nil {
-			response.Address = &dto2.AddressResponse{
+			response.Address = &dto.AddressResponse{
 				ID:           user.Address.ID,
 				Type:         string(user.Address.Type),
 				Street:       user.Address.Street,
@@ -169,7 +170,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	var req dto2.UpdateUserRequest
+	var req dto.UpdateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -181,7 +182,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	response := &dto2.UserResponse{
+	response := &dto.UserResponse{
 		ID:         user.ID,
 		Type:       string(user.Type),
 		AddressID:  user.AddressID,

@@ -9,7 +9,7 @@ export default function Addresses() {
     const { t } = useTranslation();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
-    const [filter, setFilter] = useState<'all' | 'tenant' | 'property'>('all');
+    const [filter, setFilter] = useState<'all' | 'tenant' | 'property' | 'reference'>('all');
     const { data: allAddresses = [], isLoading: allLoading, error: allError } = useAddresses();
     const { data: tenantAddresses = [], isLoading: tenantLoading, error: tenantError } = useTenantAddresses();
     const { data: propertyAddresses = [], isLoading: propertyLoading, error: propertyError } = usePropertyAddresses();
@@ -103,6 +103,15 @@ export default function Addresses() {
                         }`}
                 >
                     {t('addresses.filters.property')}
+                </button>
+                <button
+                    onClick={() => setFilter('reference')}
+                    className={`px-4 py-2 rounded-lg font-medium ${filter === 'reference'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        }`}
+                >
+                    {t('addresses.filters.reference')}
                 </button>
             </div>
 

@@ -8,11 +8,9 @@ import type {
     CreateReference,
     CreateTenant,
     CreateUser,
-    Reference,
-    Tenant,
+    OverallStatistics,
     UpdateAddress,
     UpdateContract,
-    UpdateContractVersion,
     UpdateReference,
     UpdateTenant,
     UpdateUser,
@@ -263,20 +261,20 @@ class ApiService {
     };
 
     // Tenant endpoints (wrapper around user endpoints)
-    getTenants = (): Promise<Tenant[]> => {
-        return this.getUsers("tenant") as Promise<Tenant[]>;
+    getTenants = (): Promise<User[]> => {
+        return this.getUsers("tenant") as Promise<User[]>;
     };
 
-    getTenant = (id: string): Promise<Tenant> => {
-        return this.getUser(id) as Promise<Tenant>;
+    getTenant = (id: string): Promise<User> => {
+        return this.getUser(id) as Promise<User>;
     };
 
-    createTenant = (tenant: CreateTenant): Promise<Tenant> => {
-        return this.createUser(tenant) as Promise<Tenant>;
+    createTenant = (tenant: CreateTenant): Promise<User> => {
+        return this.createUser(tenant) as Promise<User>;
     };
 
-    updateTenant = (tenant: UpdateTenant): Promise<Tenant> => {
-        return this.updateUser(tenant) as Promise<Tenant>;
+    updateTenant = (tenant: UpdateTenant): Promise<User> => {
+        return this.updateUser(tenant) as Promise<User>;
     };
 
     deleteTenant = (id: string): Promise<void> => {
@@ -284,20 +282,20 @@ class ApiService {
     };
 
     // Reference endpoints (wrapper around user endpoints)
-    getReferences = (): Promise<Reference[]> => {
-        return this.getUsers("reference") as Promise<Reference[]>;
+    getReferences = (): Promise<User[]> => {
+        return this.getUsers("reference") as Promise<User[]>;
     };
 
-    getReference = (id: string): Promise<Reference> => {
-        return this.getUser(id) as Promise<Reference>;
+    getReference = (id: string): Promise<User> => {
+        return this.getUser(id) as Promise<User>;
     };
 
-    createReference = (reference: CreateReference): Promise<Reference> => {
-        return this.createUser(reference) as Promise<Reference>;
+    createReference = (reference: CreateReference): Promise<User> => {
+        return this.createUser(reference) as Promise<User>;
     };
 
-    updateReference = (reference: UpdateReference): Promise<Reference> => {
-        return this.updateUser(reference) as Promise<Reference>;
+    updateReference = (reference: UpdateReference): Promise<User> => {
+        return this.updateUser(reference) as Promise<User>;
     };
 
     deleteReference = (id: string): Promise<void> => {
@@ -359,6 +357,11 @@ class ApiService {
                 }
                 return response.blob();
             });
+    };
+
+    // Statistics
+    getOverallStatistics = (): Promise<OverallStatistics> => {
+        return this.request<OverallStatistics>("/api/v1/statistics/overall");
     };
 }
 

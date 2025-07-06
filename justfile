@@ -22,7 +22,7 @@ clean:
 
 # Docker commands
 up:
-	docker compose up
+	docker compose up -d --no-deps --build
 
 down:
 	docker compose down
