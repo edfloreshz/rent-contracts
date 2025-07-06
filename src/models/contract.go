@@ -22,19 +22,19 @@ const (
 
 type Contract struct {
 	ID               uuid.UUID      `json:"id" gorm:"type:uuid;primary_key;default:uuid_generate_v4()"`
-	CurrentVersionID *uuid.UUID     `json:"currentVersionId" gorm:"type:uuid"`
-	TenantID         uuid.UUID      `json:"tenantId" gorm:"type:uuid;not null"`
-	AddressID        uuid.UUID      `json:"addressId" gorm:"type:uuid;not null"`
-	CreatedAt        time.Time      `json:"createdAt" gorm:"default:CURRENT_TIMESTAMP"`
-	UpdatedAt        *time.Time     `json:"updatedAt"`
-	DeletedAt        gorm.DeletedAt `json:"deletedAt" gorm:"column:deletedAt;index"`
+	CurrentVersionID *uuid.UUID     `json:"currentVersionId" gorm:"column:currentversionid;type:uuid"`
+	TenantID         uuid.UUID      `json:"tenantId" gorm:"column:tenantid;type:uuid;not null"`
+	AddressID        uuid.UUID      `json:"addressId" gorm:"column:addressid;type:uuid;not null"`
+	CreatedAt        time.Time      `json:"createdAt" gorm:"column:createdat;default:CURRENT_TIMESTAMP"`
+	UpdatedAt        *time.Time     `json:"updatedAt" gorm:"column:updatedat"`
+	DeletedAt        gorm.DeletedAt `json:"deletedAt" gorm:"column:deletedat;index"`
 
 	// Relationships
-	CurrentVersion *ContractVersion  `json:"currentVersion" gorm:"foreignKey:CurrentVersionID"`
-	Tenant         User              `json:"tenant" gorm:"foreignKey:TenantID"`
-	Address        Address           `json:"address" gorm:"foreignKey:AddressID"`
-	Versions       []ContractVersion `json:"versions" gorm:"foreignKey:ContractID"`
-	References     []User            `json:"references" gorm:"many2many:contractReferences;foreignKey:ID;joinForeignKey:ContractID;References:ID;joinReferences:ReferenceID"`
+	CurrentVersion *ContractVersion  `json:"currentVersion" gorm:"foreignKey:CurrentVersionID;references:id"`
+	Tenant         User              `json:"tenant" gorm:"foreignKey:TenantID;references:id"`
+	Address        Address           `json:"address" gorm:"foreignKey:AddressID;references:id"`
+	Versions       []ContractVersion `json:"versions" gorm:"foreignKey:ContractID;references:id"`
+	References     []User            `json:"references" gorm:"many2many:contractreferences;foreignKey:ID;joinForeignKey:contractid;References:ID;joinReferences:referenceid"`
 }
 
 func (Contract) TableName() string {

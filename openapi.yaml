@@ -2,11 +2,11 @@ openapi: 3.0.3
 info:
   title: Rent Contracts API
   version: 1.0.0
-  description: API for managing rental contracts, addresses, users, contract versions, and references.
+  description: API for managing rental contracts, addresses, users, and contract versions.
 servers:
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:8080
 paths:
-  /addresses:
+  /api/v1/addresses:
     get:
       tags: [Addresses]
       summary: Get all addresses
@@ -25,7 +25,7 @@ paths:
       responses:
         '201':
           description: Address created
-  /addresses/{id}:
+  /api/v1/addresses/{id}:
     get:
       tags: [Addresses]
       summary: Get address by ID
@@ -68,7 +68,7 @@ paths:
       responses:
         '204':
           description: Address deleted
-  /users:
+  /api/v1/users:
     get:
       tags: [Users]
       summary: Get all users
@@ -87,7 +87,7 @@ paths:
       responses:
         '201':
           description: User created
-  /users/{id}:
+  /api/v1/users/{id}:
     get:
       tags: [Users]
       summary: Get user by ID
@@ -130,7 +130,7 @@ paths:
       responses:
         '204':
           description: User deleted
-  /contracts:
+  /api/v1/contracts:
     get:
       tags: [Contracts]
       summary: Get all contracts
@@ -149,7 +149,7 @@ paths:
       responses:
         '201':
           description: Contract created
-  /contracts/{id}:
+  /api/v1/contracts/{id}:
     get:
       tags: [Contracts]
       summary: Get contract by ID
@@ -192,13 +192,7 @@ paths:
       responses:
         '204':
           description: Contract deleted
-  /contract-versions:
-    get:
-      tags: [Contract Versions]
-      summary: Get all contract versions
-      responses:
-        '200':
-          description: List of contract versions
+  /api/v1/contracts/versions:
     post:
       tags: [Contract Versions]
       summary: Create a new contract version
@@ -211,10 +205,10 @@ paths:
       responses:
         '201':
           description: Contract version created
-  /contract-versions/{id}:
+  /api/v1/contracts/{id}/versions:
     get:
       tags: [Contract Versions]
-      summary: Get contract version by ID
+      summary: Get contract versions by contract ID
       parameters:
         - in: path
           name: id
@@ -223,82 +217,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Contract version found
-    put:
-      tags: [Contract Versions]
-      summary: Update contract version
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ContractVersionInput'
-      responses:
-        '200':
-          description: Contract version updated
-    delete:
-      tags: [Contract Versions]
-      summary: Delete contract version
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Contract version deleted
-  /contract-references:
-    get:
-      tags: [Contract References]
-      summary: Get all contract references
-      parameters:
-        - in: query
-          name: contractId
-          schema:
-            type: string
-        - in: query
-          name: referenceId
-          schema:
-            type: string
-      responses:
-        '200':
-          description: List of contract references
-    post:
-      tags: [Contract References]
-      summary: Create a new contract reference
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ContractReferenceInput'
-      responses:
-        '201':
-          description: Contract reference created
-    delete:
-      tags: [Contract References]
-      summary: Delete contract reference
-      parameters:
-        - in: query
-          name: contractId
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: referenceId
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Contract reference deleted
+          description: List of contract versions
 components:
   schemas:
     AddressInput:
@@ -373,11 +292,4 @@ components:
           type: string
           format: date
         specialTerms:
-          type: string
-    ContractReferenceInput:
-      type: object
-      properties:
-        contractId:
-          type: string
-        referenceId:
           type: string
