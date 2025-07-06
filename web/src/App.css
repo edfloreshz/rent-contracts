@@ -1,0 +1,19 @@
+/* App-specific styles */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.error {
+  color: #dc2626;
+  text-align: center;
+  padding: 20px;
+}
+
+.success {
+  color: #16a34a;
+  text-align: center;
+  padding: 20px;
+}
