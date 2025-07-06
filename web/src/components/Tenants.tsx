@@ -3,6 +3,7 @@ import { useTenants, useDeleteTenant } from '../hooks/api';
 import type { Tenant } from '../types';
 import TenantForm from './TenantForm';
 import { useTranslation } from 'react-i18next';
+import { formatPhone } from '../utils';
 
 export default function Tenants() {
     const { t } = useTranslation();
@@ -84,7 +85,7 @@ export default function Tenants() {
                                     <div className="text-sm text-gray-900 dark:text-white">{tenant.email}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-900 dark:text-white">{tenant.phone}</div>
+                                    <div className="text-sm text-gray-900 dark:text-white">{formatPhone(tenant.phone)}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm text-gray-900 dark:text-white">

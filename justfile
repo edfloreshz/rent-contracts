@@ -26,3 +26,6 @@ up:
 
 down:
 	docker compose down
+
+web:
+	cd web && deno run dev

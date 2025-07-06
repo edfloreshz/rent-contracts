@@ -3,6 +3,7 @@ import { useGuarantors, useDeleteGuarantor } from '../hooks/api';
 import type { Guarantor } from '../types';
 import GuarantorForm from './GuarantorForm';
 import { useTranslation } from 'react-i18next';
+import { formatPhone } from '../utils';
 
 export default function Guarantors() {
     const { t } = useTranslation();
@@ -81,7 +82,7 @@ export default function Guarantors() {
                                     <div className="text-sm text-gray-900 dark:text-white">{guarantor.email}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-900 dark:text-white">{guarantor.phone}</div>
+                                    <div className="text-sm text-gray-900 dark:text-white">{formatPhone(guarantor.phone)}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm text-gray-900 dark:text-white">
