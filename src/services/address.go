@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
 
@@ -52,6 +53,14 @@ func (s *AddressService) GetAddressByID(id uuid.UUID) (*models.Address, error) {
 func (s *AddressService) GetAllAddresses() ([]models.Address, error) {
 	var addresses []models.Address
 	if err := s.db.Find(&addresses).Error; err != nil {
+		return nil, err
+	}
+	return addresses, nil
+}
+
+func (s *AddressService) GetAddressesByType(addressType models.AddressType) ([]models.Address, error) {
+	var addresses []models.Address
+	if err := s.db.Where("type = ?", addressType).Find(&addresses).Error; err != nil {
 		return nil, err
 	}
 	return addresses, nil

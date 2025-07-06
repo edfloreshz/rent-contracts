@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"github.com/edfloreshz/rent-contracts/src/dto"
-	"github.com/edfloreshz/rent-contracts/src/services"
 	"net/http"
 	"time"
+
+	"github.com/edfloreshz/rent-contracts/src/dto"
+	"github.com/edfloreshz/rent-contracts/src/models"
+	"github.com/edfloreshz/rent-contracts/src/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -90,7 +92,19 @@ func (h *AddressHandler) GetAddress(c *gin.Context) {
 }
 
 func (h *AddressHandler) GetAllAddresses(c *gin.Context) {
-	addresses, err := h.addressService.GetAllAddresses()
+	typeFilter := c.Query("type")
+
+	var addresses []models.Address
+	var err error
+
+	if typeFilter != "" {
+		// Convert string to AddressType
+		addressType := models.AddressType(typeFilter)
+		addresses, err = h.addressService.GetAddressesByType(addressType)
+	} else {
+		addresses, err = h.addressService.GetAllAddresses()
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

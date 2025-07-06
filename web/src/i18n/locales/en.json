@@ -142,7 +142,8 @@
         "filters": {
             "all": "All Addresses",
             "tenant": "Tenant Addresses",
-            "property": "Property Addresses"
+            "property": "Property Addresses",
+            "reference": "Reference Addresses"
         }
     },
     "references": {

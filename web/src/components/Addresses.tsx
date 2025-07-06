@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAddresses, useDeleteAddress, useTenantAddresses, usePropertyAddresses } from '../hooks/api';
+import { useAddresses, useDeleteAddress, useTenantAddresses, usePropertyAddresses, useReferenceAddresses } from '../hooks/api';
 import type { Address } from '../types';
 import { AddressType } from '../types';
 import AddressForm from './AddressForm';
@@ -14,6 +14,7 @@ export default function Addresses() {
     const { data: allAddresses = [], isLoading: allLoading, error: allError } = useAddresses();
     const { data: tenantAddresses = [], isLoading: tenantLoading, error: tenantError } = useTenantAddresses();
     const { data: propertyAddresses = [], isLoading: propertyLoading, error: propertyError } = usePropertyAddresses();
+    const { data: referenceAddresses = [], isLoading: referenceLoading, error: referenceError } = useReferenceAddresses();
     const deleteAddress = useDeleteAddress();
 
     // Select the appropriate data based on filter
@@ -23,6 +24,8 @@ export default function Addresses() {
                 return { addresses: tenantAddresses, isLoading: tenantLoading, error: tenantError };
             case 'property':
                 return { addresses: propertyAddresses, isLoading: propertyLoading, error: propertyError };
+            case 'reference':
+                return { addresses: referenceAddresses, isLoading: referenceLoading, error: referenceError };
             default:
                 return { addresses: allAddresses, isLoading: allLoading, error: allError };
         }
