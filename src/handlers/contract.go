@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
 	"github.com/edfloreshz/rent-contracts/src/services"
-	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -188,7 +189,19 @@ func (h *ContractHandler) GetContractDocument(c *gin.Context) {
 		return
 	}
 
-	document, err := h.contractService.GetContractDocument(contractID)
+	// Get optional version ID from query parameters
+	versionIDStr := c.Query("versionId")
+	var versionID *uuid.UUID
+	if versionIDStr != "" {
+		parsedVersionID, err := uuid.Parse(versionIDStr)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid version UUID"})
+			return
+		}
+		versionID = &parsedVersionID
+	}
+
+	document, err := h.contractService.GetContractDocument(contractID, versionID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

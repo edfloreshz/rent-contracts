@@ -208,7 +208,12 @@ export const useDeleteContract = () => {
 
 export const useGenerateContractPdf = () => {
     return useMutation({
-        mutationFn: apiService.getContractDocument,
+        mutationFn: (
+            { contractId, versionId }: {
+                contractId: string;
+                versionId?: string;
+            },
+        ) => apiService.getContractDocument(contractId, versionId),
     });
 };
 

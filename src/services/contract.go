@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"fmt"
+
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
 	"github.com/google/uuid"
@@ -216,10 +217,31 @@ func (s *ContractService) GetContractVersionsByContractID(contractID uuid.UUID) 
 	return versions, nil
 }
 
-func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
+func (s *ContractService) GetContractDocument(id uuid.UUID, versionID *uuid.UUID) ([]byte, error) {
 	contract, err := s.GetContractByID(id)
 	if err != nil {
 		return nil, err
+	}
+
+	// If a specific version is requested, find and use that version
+	var targetVersion *models.ContractVersion
+	if versionID != nil {
+		for _, version := range contract.Versions {
+			if version.ID == *versionID {
+				targetVersion = &version
+				break
+			}
+		}
+		if targetVersion == nil {
+			return nil, fmt.Errorf("version with ID %s not found", versionID.String())
+		}
+	} else {
+		// Use current version if no specific version requested
+		targetVersion = contract.CurrentVersion
+	}
+
+	if targetVersion == nil {
+		return nil, fmt.Errorf("no version found for contract")
 	}
 
 	cfg := config.NewBuilder().
@@ -340,7 +362,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 
 		text.NewRow(10, fmt.Sprintf(
 			"\"EL ARRENDADOR\" otorga en arrendamiento el EL INMUEBLE a EL ARRENDATARIO, y éste lo recibe a su entera satisfacción, para local de: %s, en buen estado con todas sus instalaciones funcionando y en servicio.",
-			contract.CurrentVersion.Business),
+			targetVersion.Business),
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
@@ -358,7 +380,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 
 		text.NewRow(14, fmt.Sprintf(
 			"La renta mensual que el ARRENDATARIO deberá pagar a partir del día: %s fecha desde la cual estará vigente este contrato, es la Cantidad de: $%.2f más un mes de Depósito. Quedando en el entendido de que la renta se pagará cada mes, íntegra y puntualmente el día señalado aún cuando el ARRENDATARIO lo ocupe una parte del mes (o incluso si no lo ocupa).",
-			contract.CurrentVersion.StartDate.Format("02 de enero de 2006"), contract.CurrentVersion.Rent),
+			targetVersion.StartDate.Format("02 de enero de 2006"), targetVersion.Rent),
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
@@ -376,7 +398,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 
 		text.NewRow(18, fmt.Sprintf(
 			"Queda expresamente pactado que las rentas se incrementarán automáticamente de forma acumulativa en forma anual, ajustándose las mismas a la variación que haya sufrido el Índice Nacional de precios al consumidor que publica el Banco Nacional de México a través del diario oficial de la federación o en el salario mínimo respecto a los últimos doce meses inmediatos anteriores al mes en que deba realizarse el ajuste al precio de la renta, el que sea mayor. El incremento será del %.2f%%.",
-			contract.CurrentVersion.RentIncreasePercentage),
+			targetVersion.RentIncreasePercentage),
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
@@ -394,7 +416,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 
 		text.NewRow(28, fmt.Sprintf(
 			"La vigencia del presente contrato será de: %s plazo convenido por ambas partes, a partir del día %s al %s. Al término de dicho plazo de vigencia, EL ARRENDATARIO se obliga a hacer entrega a EL ARRENDADOR el INMUEBLE arrendado, en las condiciones en las cuales lo recibió, todo en buen estado (pisos, paredes, pintura, muebles de baño, cristales, cortinas metálicas etc.) y estando al corriente en todos los pagos de Servicios, tales como Luz (electricidad) y Agua, de los cuales deberá entregar AL ARRENDADOR, los recibos correspondientes totalmente pagados. En caso de que EL ARRENDATARIO no entregará el INMUEBLE a EL ARRENDADOR, al término del presente contrato, EL ARRENDATARIO pagará a EL ARRENDADOR, a partir del siguiente mes por concepto de renta mensual, la cantidad pactada, más un incremento del 6%% mensual por el número de meses que transcurran hasta la firma de renovación del contrato.",
-			contract.CurrentVersion.Type, contract.CurrentVersion.StartDate.Format("02 de enero de 2006"), contract.CurrentVersion.EndDate.Format("02 de enero de 2006")),
+			targetVersion.Type, targetVersion.StartDate.Format("02 de enero de 2006"), targetVersion.EndDate.Format("02 de enero de 2006")),
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,
@@ -412,7 +434,7 @@ func (s *ContractService) GetContractDocument(id uuid.UUID) ([]byte, error) {
 
 		text.NewRow(26, fmt.Sprintf(
 			"A efecto de garantizar todas y cada una de las obligaciones que se derivan del presente contrato, EL ARRENDATARIO hace entrega al momento de la firma del mismo, La Cantidad de $%.2f por concepto de Depósito en garantía. Suma que se obliga EL ARRENDADOR a devolver a EL ARRENDATARIO a más tardar en 7 (siete) días después de la desocupación del INMUEBLE, siempre y cuando EL ARRENDATARIO lo entregue en el mismo estado en que lo recibió, y previa comprobación (con recibos pagados) de que no existe ningún adeudo derivado de los servicios de Luz y Agua potable, quedando aclarado que el mes de depósito, no se utilizará como pago de renta, es única y exclusivamente para garantizar reparaciones o adeudos pendientes del ARRENDATARIO y se regresará después de verificar que no exista ningún pendiente por liquidar.",
-			contract.CurrentVersion.Deposit),
+			targetVersion.Deposit),
 			props.Text{
 				Size:            8,
 				VerticalPadding: 1,

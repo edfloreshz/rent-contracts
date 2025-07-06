@@ -10,6 +10,16 @@ import { useTranslation } from 'react-i18next';
 function ContractVersionsTable({ contractId, currentVersionId }: { contractId: string, currentVersionId?: string }) {
     const { t } = useTranslation();
     const { data: versions = [], isLoading, error } = useContractVersions(contractId);
+    const generatePdf = useGenerateContractPdf();
+
+    const handleGenerateVersionPdf = async (versionId: string, versionNumber: number) => {
+        try {
+            const blob = await generatePdf.mutateAsync({ contractId, versionId });
+            downloadFile(blob, `contract-${contractId}-v${versionNumber}.pdf`);
+        } catch (error) {
+            console.error('Error generating PDF for version:', error);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -60,6 +70,9 @@ function ContractVersionsTable({ contractId, currentVersionId }: { contractId: s
                         </th>
                         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             {t('contracts.versions.createdAt')}
+                        </th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            {t('common.actions')}
                         </th>
                     </tr>
                 </thead>
@@ -116,6 +129,15 @@ function ContractVersionsTable({ contractId, currentVersionId }: { contractId: s
                                     {new Date(version.createdAt).toLocaleDateString()}
                                 </div>
                             </td>
+                            <td className="px-4 py-2 whitespace-nowrap">
+                                <button
+                                    onClick={() => handleGenerateVersionPdf(version.id, version.versionNumber)}
+                                    className="text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300 text-sm font-medium"
+                                    disabled={generatePdf.isPending}
+                                >
+                                    {generatePdf.isPending ? t('common.loading') : 'PDF'}
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -146,7 +168,7 @@ export default function Contracts() {
 
     const handleGeneratePdf = async (id: string, tenantName: string) => {
         try {
-            const blob = await generatePdf.mutateAsync(id);
+            const blob = await generatePdf.mutateAsync({ contractId: id });
             downloadFile(blob, `contract-${tenantName}.pdf`);
         } catch (error) {
             console.error('Error generating PDF:', error);

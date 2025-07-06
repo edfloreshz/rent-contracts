@@ -349,8 +349,14 @@ class ApiService {
         );
     };
 
-    getContractDocument = (contractId: string): Promise<Blob> => {
-        return fetch(`${this.baseUrl}/api/v1/contracts/${contractId}/document`)
+    getContractDocument = (
+        contractId: string,
+        versionId?: string,
+    ): Promise<Blob> => {
+        const url = versionId
+            ? `${this.baseUrl}/api/v1/contracts/${contractId}/document?versionId=${versionId}`
+            : `${this.baseUrl}/api/v1/contracts/${contractId}/document`;
+        return fetch(url)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
