@@ -72,28 +72,28 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                <h2 className="text-xl font-bold mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+                <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
                     {guarantor ? t('guarantors.editGuarantor') : t('guarantors.addNewGuarantor')}
                 </h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('common.name')}
                         </label>
                         <input
                             type="text"
                             {...register('firstName', { required: t('guarantors.nameRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.firstName && (
-                            <p className="text-red-600 text-sm mt-1">{errors.firstName.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.firstName.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('common.email')}
                         </label>
                         <input
@@ -105,34 +105,34 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                                     message: t('common.invalidEmail')
                                 }
                             })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.email && (
-                            <p className="text-red-600 text-sm mt-1">{errors.email.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.email.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('common.phone')}
                         </label>
                         <input
                             type="tel"
                             {...register('phone', { required: t('guarantors.phoneRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.phone && (
-                            <p className="text-red-600 text-sm mt-1">{errors.phone.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.phone.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('common.address')}
                         </label>
                         <select
                             {...register('addressId', { required: t('guarantors.addressRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         >
                             <option value="">{t('guarantors.selectAddress')}</option>
                             {addresses.map((address) => (
@@ -142,7 +142,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                             ))}
                         </select>
                         {errors.addressId && (
-                            <p className="text-red-600 text-sm mt-1">{errors.addressId.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.addressId.message}</p>
                         )}
                     </div>
 
@@ -150,7 +150,7 @@ export default function GuarantorForm({ guarantor, onClose }: GuarantorFormProps
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
                         >
                             {t('common.cancel')}
                         </button>

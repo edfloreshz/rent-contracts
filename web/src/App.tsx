@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from './context/ThemeContext';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Tenants from './components/Tenants';
@@ -22,19 +23,21 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/tenants" element={<Tenants />} />
-            <Route path="/contracts" element={<Contracts />} />
-            <Route path="/addresses" element={<Addresses />} />
-            <Route path="/guarantors" element={<Guarantors />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/tenants" element={<Tenants />} />
+              <Route path="/contracts" element={<Contracts />} />
+              <Route path="/addresses" element={<Addresses />} />
+              <Route path="/guarantors" element={<Guarantors />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 

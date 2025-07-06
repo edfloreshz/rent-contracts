@@ -64,8 +64,8 @@ export default function Addresses() {
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">{t('addresses.title')}</h1>
-                    <p className="text-gray-600">{t('addresses.subtitle')}</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('addresses.title')}</h1>
+                    <p className="text-gray-600 dark:text-gray-300">{t('addresses.subtitle')}</p>
                 </div>
                 <button
                     onClick={() => setIsFormOpen(true)}
@@ -81,7 +81,7 @@ export default function Addresses() {
                     onClick={() => setFilter('all')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'all'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.all')}
@@ -90,7 +90,7 @@ export default function Addresses() {
                     onClick={() => setFilter('tenant')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'tenant'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.tenant')}
@@ -99,7 +99,7 @@ export default function Addresses() {
                     onClick={() => setFilter('property')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'property'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.property')}
@@ -109,7 +109,7 @@ export default function Addresses() {
             {/* Empty state */}
             {(!addresses || addresses.length === 0) && (
                 <div className="text-center py-12">
-                    <p className="text-gray-500">{t('addresses.noAddresses')}</p>
+                    <p className="text-gray-500 dark:text-gray-400">{t('addresses.noAddresses')}</p>
                 </div>
             )}
 
@@ -117,24 +117,24 @@ export default function Addresses() {
             {addresses && addresses.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {addresses.map((address: Address) => (
-                        <div key={address.id} className="bg-white rounded-lg shadow p-6">
+                        <div key={address.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="flex-1">
-                                    <h3 className="text-lg font-semibold text-gray-900">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                         {address.street} {address.number}
                                     </h3>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-gray-600 dark:text-gray-300">
                                         {address.neighborhood}
                                     </p>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-gray-600 dark:text-gray-300">
                                         {address.city}, {address.state} {address.zipCode}
                                     </p>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-gray-600 dark:text-gray-300">
                                         {address.country}
                                     </p>
                                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-2 ${address.type === AddressType.Property
-                                        ? 'bg-green-100 text-green-800'
-                                        : 'bg-blue-100 text-blue-800'
+                                        ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                                        : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
                                         }`}>
                                         {t(`addresses.types.${address.type}`)}
                                     </span>
@@ -142,23 +142,23 @@ export default function Addresses() {
                                 <div className="flex space-x-2">
                                     <button
                                         onClick={() => handleEdit(address)}
-                                        className="text-blue-600 hover:text-blue-900"
+                                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                                     >
                                         {t('common.edit')}
                                     </button>
                                     <button
                                         onClick={() => handleDelete(address.id)}
-                                        className="text-red-600 hover:text-red-900"
+                                        className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
                                     >
                                         {t('common.delete')}
                                     </button>
                                 </div>
                             </div>
                             <div className="mb-4">
-                                <div className="text-sm text-gray-500">
+                                <div className="text-sm text-gray-500 dark:text-gray-400">
                                     {t('navigation.contracts')}: {address.contracts?.length || 0}
                                 </div>
-                                <div className="text-sm text-gray-500">
+                                <div className="text-sm text-gray-500 dark:text-gray-400">
                                     {t('tenants.createdAt')}: {new Date(address.createdAt).toLocaleDateString()}
                                 </div>
                             </div>

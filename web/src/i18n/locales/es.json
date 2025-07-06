@@ -17,7 +17,10 @@
         "required": "Este campo es obligatorio",
         "invalidEmail": "Dirección de correo electrónico no válida",
         "close": "Cerrar",
-        "period": "Período"
+        "period": "Período",
+        "firstName": "Primer nombre",
+        "middleName": "Apellido paterno",
+        "lastName": "Apellido materno"
     },
     "navigation": {
         "dashboard": "Panel de Control",
@@ -124,12 +127,14 @@
         "fullAddress": "Dirección Completa",
         "types": {
             "tenant": "Dirección de Inquilino",
-            "property": "Dirección de Propiedad"
+            "property": "Dirección de Propiedad",
+            "reference": "Dirección de Referencia"
         },
         "filters": {
             "all": "Todas las Direcciones",
             "tenant": "Direcciones de Inquilinos",
-            "property": "Direcciones de Propiedades"
+            "property": "Direcciones de Propiedades",
+            "reference": "Direcciones de Referencias"
         }
     },
     "guarantors": {

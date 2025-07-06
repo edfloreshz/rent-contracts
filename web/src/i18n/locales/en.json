@@ -16,7 +16,10 @@
         "actions": "Actions",
         "required": "This field is required",
         "invalidEmail": "Invalid email address",
-        "close": "Close"
+        "close": "Close",
+        "firstName": "First Name",
+        "middleName": "Middle Name",
+        "lastName": "Last Name"
     },
     "navigation": {
         "dashboard": "Dashboard",
@@ -123,7 +126,8 @@
         "fullAddress": "Full Address",
         "types": {
             "tenant": "Tenant Address",
-            "property": "Property Address"
+            "property": "Property Address",
+            "reference": "Reference Address"
         },
         "filters": {
             "all": "All Addresses",

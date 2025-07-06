@@ -78,123 +78,123 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                <h2 className="text-xl font-bold mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+                <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
                     {address ? t('addresses.editAddress') : t('addresses.addNewAddress')}
                 </h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.street')}
                         </label>
                         <input
                             type="text"
                             {...register('street', { required: t('addresses.streetRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.street && (
-                            <p className="text-red-600 text-sm mt-1">{errors.street.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.street.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.number')}
                         </label>
                         <input
                             type="text"
                             {...register('number', { required: t('addresses.numberRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.number && (
-                            <p className="text-red-600 text-sm mt-1">{errors.number.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.number.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.neighborhood')}
                         </label>
                         <input
                             type="text"
                             {...register('neighborhood', { required: t('addresses.neighborhoodRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.neighborhood && (
-                            <p className="text-red-600 text-sm mt-1">{errors.neighborhood.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.neighborhood.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.city')}
                         </label>
                         <input
                             type="text"
                             {...register('city', { required: t('addresses.cityRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.city && (
-                            <p className="text-red-600 text-sm mt-1">{errors.city.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.city.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.state')}
                         </label>
                         <input
                             type="text"
                             {...register('state', { required: t('addresses.stateRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.state && (
-                            <p className="text-red-600 text-sm mt-1">{errors.state.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.state.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.zipCode')}
                         </label>
                         <input
                             type="text"
                             {...register('zipCode', { required: t('addresses.zipCodeRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.zipCode && (
-                            <p className="text-red-600 text-sm mt-1">{errors.zipCode.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.zipCode.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.country')}
                         </label>
                         <input
                             type="text"
                             {...register('country', { required: t('addresses.countryRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         />
                         {errors.country && (
-                            <p className="text-red-600 text-sm mt-1">{errors.country.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.country.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t('addresses.type')}
                         </label>
                         <select
                             {...register('type', { required: t('addresses.typeRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         >
                             <option value={AddressType.Property}>{t('addresses.types.property')}</option>
                             <option value={AddressType.Tenant}>{t('addresses.types.tenant')}</option>
                         </select>
                         {errors.type && (
-                            <p className="text-red-600 text-sm mt-1">{errors.type.message}</p>
+                            <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.type.message}</p>
                         )}
                     </div>
 
@@ -202,7 +202,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
                         >
                             {t('common.cancel')}
                         </button>

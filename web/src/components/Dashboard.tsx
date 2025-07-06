@@ -44,21 +44,21 @@ export default function Dashboard() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-bold text-gray-900">{t('dashboard.title')}</h1>
-                <p className="text-gray-600">{t('dashboard.subtitle')}</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('dashboard.title')}</h1>
+                <p className="text-gray-600 dark:text-gray-300">{t('dashboard.subtitle')}</p>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat) => (
-                    <div key={stat.name} className="bg-white rounded-lg shadow p-6">
+                    <div key={stat.name} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                         <div className="flex items-center">
                             <div className={`p-3 rounded-full ${stat.color} text-white mr-4`}>
                                 <span className="text-xl">{stat.icon}</span>
                             </div>
                             <div>
-                                <p className="text-sm text-gray-600">{stat.name}</p>
-                                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{stat.name}</p>
+                                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                             </div>
                         </div>
                     </div>
@@ -66,69 +66,69 @@ export default function Dashboard() {
             </div>
 
             {/* Revenue Card */}
-            <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('dashboard.monthlyRevenue')}</h3>
-                <div className="text-3xl font-bold text-green-600">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('dashboard.monthlyRevenue')}</h3>
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                     ${totalRent.toLocaleString()}
                 </div>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
                     {t('dashboard.fromContracts', { count: activeContracts.length })}
                 </p>
             </div>
 
             {/* Recent Contracts */}
-            <div className="bg-white rounded-lg shadow">
-                <div className="px-6 py-4 border-b border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900">{t('dashboard.recentContracts')}</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('dashboard.recentContracts')}</h3>
                 </div>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead className="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     {t('dashboard.tenant')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     {t('dashboard.property')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     {t('dashboard.rent')}
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     {t('dashboard.status')}
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             {contracts.slice(0, 5).map((contract: Contract) => (
                                 <tr key={contract.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900">
+                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                                             {contract.tenant?.firstName} {contract.tenant?.middleName} {contract.tenant?.lastName}
                                         </div>
-                                        <div className="text-sm text-gray-500">
+                                        <div className="text-sm text-gray-500 dark:text-gray-400">
                                             {contract.tenant?.email}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">
+                                        <div className="text-sm text-gray-900 dark:text-white">
                                             {contract.address.street} {contract.address.number}
                                         </div>
-                                        <div className="text-sm text-gray-500">
+                                        <div className="text-sm text-gray-500 dark:text-gray-400">
                                             {contract.address.city}, {contract.address.state}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900">
+                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                                             ${contract.currentVersion?.rent.toLocaleString()}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${contract.currentVersion?.status === ContractStatus.Active
-                                            ? 'bg-green-100 text-green-800'
+                                            ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                                             : contract.currentVersion?.status === ContractStatus.Expired
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-gray-100 text-gray-800'
+                                                ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                                             }`}>
                                             {t(`contracts.statuses.${contract.currentVersion?.status}`)}
                                         </span>
