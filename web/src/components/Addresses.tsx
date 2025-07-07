@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAddresses, useDeleteAddress, useTenantAddresses, usePropertyAddresses, useReferenceAddresses } from '../hooks/api';
-import type { Address } from '../types';
+import type { Address } from '../models/address';
 import { AddressType } from '../types';
 import AddressForm from './AddressForm';
 import MapPreview from './MapPreview';

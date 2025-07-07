@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useReferenceAddresses, useCreateReference, useUpdateReference } from '../hooks/api';
-import type { Reference, CreateReference, UpdateReference } from '../types';
+import type { User } from '../models/user';
 import { useTranslation } from 'react-i18next';
+import type { CreateUser, UpdateUser } from '../dtos/user';
 
 interface ReferenceFormProps {
-    reference?: Reference | null;
+    reference?: User | null;
     onClose: () => void;
 }
 
@@ -53,13 +54,13 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
         setIsSubmitting(true);
         try {
             if (reference) {
-                const updateData: UpdateReference = {
+                const updateData: UpdateUser = {
                     id: reference.id,
                     ...data,
                 };
                 await updateReference.mutateAsync(updateData);
             } else {
-                const createData: CreateReference = { ...data, type: "reference" };
+                const createData: CreateUser = { ...data, type: "reference" };
                 await createReference.mutateAsync(createData);
             }
             onClose();

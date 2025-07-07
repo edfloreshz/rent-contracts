@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useReferences, useDeleteReference } from '../hooks/api';
-import type { Reference } from '../types';
 import ReferenceForm from './ReferenceForm';
 import { useTranslation } from 'react-i18next';
 import { formatPhone } from '../utils';
+import type { User } from '../types';
 
 export default function References() {
     const { t } = useTranslation();
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [selectedReference, setSelectedReference] = useState<Reference | null>(null);
+    const [selectedReference, setSelectedReference] = useState<User | null>(null);
     const { data: references = [], isLoading } = useReferences();
     const deleteReference = useDeleteReference();
 
-    const handleEdit = (reference: Reference) => {
+    const handleEdit = (reference: User) => {
         setSelectedReference(reference);
         setIsFormOpen(true);
     };
@@ -78,7 +78,7 @@ export default function References() {
                                 </td>
                             </tr>
                         ) : (
-                            references.map((reference: Reference) => (
+                            references.map((reference: User) => (
                                 <tr key={reference.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-medium text-gray-900 dark:text-white">

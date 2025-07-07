@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTenants, usePropertyAddresses, useReferences, useUsers, useCreateContract, useUpdateContract, useCreateContractVersion } from '../hooks/api';
-import type { Contract, CreateContract, UpdateContract, CreateContractVersion } from '../types';
+import type { Contract } from '../models/contract';
+import type { CreateContract, UpdateContract, CreateContractVersion } from '../dtos/contract';
 import { ContractStatus, ContractType } from '../types';
 import { useTranslation } from 'react-i18next';
 
@@ -45,7 +46,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
             tenantId: contract?.tenantId || '',
             addressId: contract?.addressId || '',
             referenceIds: contract?.references?.map(r => r.id) || [],
-            deposit: contract?.currentVersion?.deposit || 0,
+            deposit: contract?.deposit || 0,
             rent: contract?.currentVersion?.rent || 0,
             rentIncreasePercentage: contract?.currentVersion?.rentIncreasePercentage || 0,
             business: contract?.currentVersion?.business || '',
@@ -65,7 +66,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                 tenantId: contract.tenantId,
                 addressId: contract.addressId,
                 referenceIds: contract.references?.map(r => r.id) || [],
-                deposit: contract.currentVersion?.deposit || 0,
+                deposit: contract.deposit || 0,
                 rent: contract.currentVersion?.rent || 0,
                 rentIncreasePercentage: contract.currentVersion?.rentIncreasePercentage || 0,
                 business: contract.currentVersion?.business || '',
@@ -98,6 +99,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                     landlordId: data.landlordId,
                     tenantId: data.tenantId,
                     addressId: data.addressId,
+                    deposit: data.deposit,
                     referenceIds: data.referenceIds,
                 };
                 const newContract = await createContract.mutateAsync(createData);

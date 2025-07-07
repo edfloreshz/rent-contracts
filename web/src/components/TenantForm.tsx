@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTenantAddresses, useCreateTenant, useUpdateTenant } from '../hooks/api';
-import type { Tenant, CreateTenant, UpdateTenant } from '../types';
+import type { User } from '../models/user';
 import { useTranslation } from 'react-i18next';
+import type { CreateUser, UpdateUser } from '../dtos/user';
 
 interface TenantFormProps {
-    tenant?: Tenant | null;
+    tenant?: User | null;
     onClose: () => void;
 }
 
@@ -53,13 +54,13 @@ export default function TenantForm({ tenant, onClose }: TenantFormProps) {
         setIsSubmitting(true);
         try {
             if (tenant) {
-                const updateData: UpdateTenant = {
+                const updateData: UpdateUser = {
                     id: tenant.id,
                     ...data,
                 };
                 await updateTenant.mutateAsync(updateData);
             } else {
-                const createData: CreateTenant = {
+                const createData: CreateUser = {
                     ...data,
                     type: "tenant",
                 };

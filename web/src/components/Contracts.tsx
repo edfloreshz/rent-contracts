@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useContracts, useDeleteContract, useGenerateContractPdf, useContractVersions } from '../hooks/api';
-import type { Contract, ContractVersion } from '../types';
+import type { Contract, ContractVersion } from '../models/contract';
 import { ContractStatus } from '../types';
 import { downloadFile } from '../utils';
 import ContractForm from './ContractForm';

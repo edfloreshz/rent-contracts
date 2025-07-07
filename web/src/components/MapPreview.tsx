@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Address } from '../types';
+import type { Address } from '../models/address';
 
 interface MapPreviewProps {
     address: Address;

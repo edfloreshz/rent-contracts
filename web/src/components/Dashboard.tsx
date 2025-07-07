@@ -1,6 +1,6 @@
 import { useContracts, useOverallStatistics } from '../hooks/api';
 import { ContractStatus } from '../types';
-import type { Contract } from '../types';
+import type { Contract } from '../models/contract';
 import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {

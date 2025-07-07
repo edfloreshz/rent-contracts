@@ -3,7 +3,7 @@ import { useTenants, useDeleteTenant } from '../hooks/api';
 import TenantForm from './TenantForm';
 import { useTranslation } from 'react-i18next';
 import { formatPhone } from '../utils';
-import type { User } from '../types';
+import type { User } from '../models/user';
 
 export default function Tenants() {
     const { t } = useTranslation();
