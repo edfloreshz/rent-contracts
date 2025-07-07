@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTenants, usePropertyAddresses, useReferences, useUsers, useCreateContract, useUpdateContract, useCreateContractVersion } from '../hooks/api';
-import type { Contract } from '../models/contract';
-import type { CreateContract, UpdateContract, CreateContractVersion } from '../dtos/contract';
-import { ContractStatus, ContractType } from '../types';
+import { useTenants, useAvailablePropertyAddresses, useReferences, useUsers, useCreateContract, useUpdateContract, useCreateContractVersion } from '../../hooks/api';
+import type { Contract } from '../../models/contract';
+import type { CreateContract, UpdateContract, CreateContractVersion } from '../../dtos/contract';
+import { ContractStatus, ContractType } from '../../types';
 import { useTranslation } from 'react-i18next';
 
 interface ContractFormProps {
@@ -32,7 +32,7 @@ interface FormData {
 export default function ContractForm({ contract, onClose }: ContractFormProps) {
     const { t } = useTranslation();
     const { data: tenants = [] } = useTenants();
-    const { data: addresses = [] } = usePropertyAddresses();
+    const { data: addresses = [] } = useAvailablePropertyAddresses();
     const { data: references = [] } = useReferences();
     const { data: landlords = [] } = useUsers("admin");
     const createContract = useCreateContract();

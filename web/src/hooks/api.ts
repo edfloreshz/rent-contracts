@@ -23,6 +23,13 @@ export const usePropertyAddresses = () => {
     });
 };
 
+export const useAvailablePropertyAddresses = () => {
+    return useQuery({
+        queryKey: ["addresses", "property"],
+        queryFn: apiService.getAvailablePropertyAddresses,
+    });
+};
+
 export const useReferenceAddresses = () => {
     return useQuery({
         queryKey: ["addresses", "reference"],

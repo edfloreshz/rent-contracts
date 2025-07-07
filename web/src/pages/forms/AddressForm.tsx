@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useCreateAddress, useUpdateAddress } from '../hooks/api';
-import type { Address } from '../models/address';
-import type { CreateAddress, UpdateAddress } from '../dtos/address';
-import { AddressType } from '../types';
+import { useCreateAddress, useUpdateAddress } from '../../hooks/api';
+import type { Address } from '../../models/address';
+import type { CreateAddress, UpdateAddress } from '../../dtos/address';
+import { AddressType } from '../../types';
 import { useTranslation } from 'react-i18next';
 
 interface AddressFormProps {

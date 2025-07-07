@@ -1,21 +1,14 @@
+import type { CreateAddress, UpdateAddress } from "../dtos/address";
 import type {
-    Address,
-    Contract,
-    ContractVersion,
-    CreateAddress,
     CreateContract,
     CreateContractVersion,
-    CreateReference,
-    CreateTenant,
-    CreateUser,
-    OverallStatistics,
-    UpdateAddress,
     UpdateContract,
-    UpdateReference,
-    UpdateTenant,
-    UpdateUser,
-    User,
-} from "../types";
+} from "../dtos/contract";
+import type { CreateUser, UpdateUser } from "../dtos/user";
+import type { Address } from "../models/address";
+import type { Contract, ContractVersion } from "../models/contract";
+import type { OverallStatistics } from "../models/statistics";
+import type { User } from "../models/user";
 
 class ApiService {
     private baseUrl: string;
@@ -110,6 +103,12 @@ class ApiService {
         return this.request<Address[]>("/api/v1/addresses?type=property");
     };
 
+    getAvailablePropertyAddresses = (): Promise<Address[]> => {
+        return this.request<Address[]>(
+            "/api/v1/addresses?type=property&available=true",
+        );
+    };
+
     getReferenceAddresses = (): Promise<Address[]> => {
         return this.request<Address[]>("/api/v1/addresses?type=reference");
     };
@@ -177,11 +176,11 @@ class ApiService {
         return this.getUser(id) as Promise<User>;
     };
 
-    createTenant = (tenant: CreateTenant): Promise<User> => {
+    createTenant = (tenant: CreateUser): Promise<User> => {
         return this.createUser(tenant) as Promise<User>;
     };
 
-    updateTenant = (tenant: UpdateTenant): Promise<User> => {
+    updateTenant = (tenant: UpdateUser): Promise<User> => {
         return this.updateUser(tenant) as Promise<User>;
     };
 
@@ -198,11 +197,11 @@ class ApiService {
         return this.getUser(id) as Promise<User>;
     };
 
-    createReference = (reference: CreateReference): Promise<User> => {
+    createReference = (reference: CreateUser): Promise<User> => {
         return this.createUser(reference) as Promise<User>;
     };
 
-    updateReference = (reference: UpdateReference): Promise<User> => {
+    updateReference = (reference: UpdateUser): Promise<User> => {
         return this.updateUser(reference) as Promise<User>;
     };
 

@@ -20,6 +20,12 @@ func NewAddressService(db *gorm.DB) *AddressService {
 	}
 }
 
+type AddressServiceFilter struct {
+	Type      *models.AddressType
+	Available *bool
+	Limit     *int
+}
+
 func (s *AddressService) CreateAddress(req *dto.CreateAddressRequest) (*models.Address, error) {
 	address := &models.Address{
 		Type:         models.AddressType(req.Type),
@@ -41,28 +47,37 @@ func (s *AddressService) CreateAddress(req *dto.CreateAddressRequest) (*models.A
 
 func (s *AddressService) GetAddressByID(id uuid.UUID) (*models.Address, error) {
 	var address models.Address
+
 	if err := s.db.First(&address, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("address not found")
 		}
 		return nil, err
 	}
+
 	return &address, nil
 }
 
-func (s *AddressService) GetAllAddresses() ([]models.Address, error) {
+func (s *AddressService) GetAllAddresses(filter *AddressServiceFilter) ([]models.Address, error) {
 	var addresses []models.Address
-	if err := s.db.Find(&addresses).Error; err != nil {
-		return nil, err
-	}
-	return addresses, nil
-}
+	query := s.db
 
-func (s *AddressService) GetAddressesByType(addressType models.AddressType) ([]models.Address, error) {
-	var addresses []models.Address
-	if err := s.db.Where("type = ?", addressType).Find(&addresses).Error; err != nil {
+	if filter != nil {
+		if filter.Type != nil {
+			query = query.Where("type = ?", *filter.Type)
+		}
+		if filter.Available != nil && *filter.Available {
+			query = query.Where("NOT EXISTS (SELECT 1 FROM contracts WHERE contracts.addressId = addresses.id)")
+		}
+		if filter.Limit != nil {
+			query = query.Limit(*filter.Limit)
+		}
+	}
+
+	if err := query.Find(&addresses).Error; err != nil {
 		return nil, err
 	}
+
 	return addresses, nil
 }
 

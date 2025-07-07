@@ -3,7 +3,7 @@ import { useContracts, useDeleteContract, useGenerateContractPdf, useContractVer
 import type { Contract, ContractVersion } from '../models/contract';
 import { ContractStatus } from '../types';
 import { downloadFile } from '../utils';
-import ContractForm from './ContractForm';
+import ContractForm from './forms/ContractForm';
 import { useTranslation } from 'react-i18next';
 
 // Component to handle contract versions for expanded rows

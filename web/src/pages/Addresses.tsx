@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useAddresses, useDeleteAddress, useTenantAddresses, usePropertyAddresses, useReferenceAddresses } from '../hooks/api';
 import type { Address } from '../models/address';
 import { AddressType } from '../types';
-import AddressForm from './AddressForm';
-import MapPreview from './MapPreview';
+import AddressForm from './forms/AddressForm';
+import MapPreview from '../components/MapPreview';
 import { useTranslation } from 'react-i18next';
 
 export default function Addresses() {

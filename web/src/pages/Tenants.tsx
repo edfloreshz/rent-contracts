@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTenants, useDeleteTenant } from '../hooks/api';
-import TenantForm from './TenantForm';
+import TenantForm from './forms/TenantForm';
 import { useTranslation } from 'react-i18next';
 import { formatPhone } from '../utils';
 import type { User } from '../models/user';

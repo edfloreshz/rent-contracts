@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTenantAddresses, useCreateTenant, useUpdateTenant } from '../hooks/api';
-import type { User } from '../models/user';
+import { useTenantAddresses, useCreateTenant, useUpdateTenant } from '../../hooks/api';
+import type { User } from '../../models/user';
 import { useTranslation } from 'react-i18next';
-import type { CreateUser, UpdateUser } from '../dtos/user';
+import type { CreateUser, UpdateUser } from '../../dtos/user';
 
 interface TenantFormProps {
     tenant?: User | null;

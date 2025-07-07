@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/edfloreshz/rent-contracts/src/dto"
@@ -94,16 +95,32 @@ func (h *AddressHandler) GetAddress(w http.ResponseWriter, r *http.Request) {
 
 func (h *AddressHandler) GetAllAddresses(w http.ResponseWriter, r *http.Request) {
 	typeFilter := r.URL.Query().Get("type")
+	availableFilter := r.URL.Query().Get("available")
+	limitFilter := r.URL.Query().Get("limit")
+	filter := services.AddressServiceFilter{}
 
-	var addresses []models.Address
 	var err error
+	var addresses []models.Address
 
 	if typeFilter != "" {
-		// Convert string to AddressType
 		addressType := models.AddressType(typeFilter)
-		addresses, err = h.addressService.GetAddressesByType(addressType)
+		filter.Type = &addressType
+	}
+
+	available, err := strconv.ParseBool(availableFilter)
+	if err == nil {
+		filter.Available = &available
+	}
+
+	limit, err := strconv.Atoi(limitFilter)
+	if err == nil && limit > 0 {
+		filter.Limit = &limit
+	}
+
+	if filter.Type != nil || filter.Available != nil || filter.Limit != nil {
+		addresses, err = h.addressService.GetAllAddresses(&filter)
 	} else {
-		addresses, err = h.addressService.GetAllAddresses()
+		addresses, err = h.addressService.GetAllAddresses(nil)
 	}
 
 	if err != nil {

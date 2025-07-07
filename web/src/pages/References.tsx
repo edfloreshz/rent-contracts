@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useReferences, useDeleteReference } from '../hooks/api';
-import ReferenceForm from './ReferenceForm';
+import ReferenceForm from './forms/ReferenceForm';
 import { useTranslation } from 'react-i18next';
 import { formatPhone } from '../utils';
 import type { User } from '../types';
