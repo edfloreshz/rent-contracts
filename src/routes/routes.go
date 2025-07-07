@@ -6,24 +6,30 @@ import (
 	"time"
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
+	"github.com/Zachacious/go-respec/respec"
 	"github.com/edfloreshz/rent-contracts/src/handlers"
 	"github.com/edfloreshz/rent-contracts/src/services"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"gorm.io/gorm"
 )
 
-func Router(db *gorm.DB) *gin.Engine {
-	router := gin.Default()
+func Router(db *gorm.DB) http.Handler {
+	router := chi.NewRouter()
+
+	// Add middleware
+	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
 
 	// Configure CORS
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"},
-		ExposeHeaders:    []string{"Content-Length"},
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"},
+		ExposedHeaders:   []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		MaxAge:           int(12 * time.Hour / time.Second),
 	}))
 
 	// Initialize services
@@ -39,60 +45,59 @@ func Router(db *gorm.DB) *gin.Engine {
 	statisticsHandler := handlers.NewStatisticsHandler(statisticsService)
 
 	// API v1 routes
-	v1 := router.Group("/api/v1")
-	{
+	router.Route("/api/v1", func(r chi.Router) {
 		// Address routes
-		addresses := v1.Group("/addresses")
-		{
-			addresses.POST("", addressHandler.CreateAddress)
-			addresses.GET("", addressHandler.GetAllAddresses)
-			addresses.GET("/:id", addressHandler.GetAddress)
-			addresses.PUT("/:id", addressHandler.UpdateAddress)
-			addresses.DELETE("/:id", addressHandler.DeleteAddress)
-		}
+		r.Route("/addresses", func(r chi.Router) {
+			respec.Meta(r).Tag("Addresses")
+			r.Post("/", respec.Handler(addressHandler.CreateAddress).Summary("Create a new address").Unwrap())
+			r.Get("/", respec.Handler(addressHandler.GetAllAddresses).Summary("Get all addresses").Unwrap())
+			r.Get("/{id}", respec.Handler(addressHandler.GetAddress).Summary("Get a single address").Unwrap())
+			r.Put("/{id}", respec.Handler(addressHandler.UpdateAddress).Summary("Update an address").Unwrap())
+			r.Delete("/{id}", respec.Handler(addressHandler.DeleteAddress).Summary("Delete an address").Unwrap())
+		})
 
 		// User routes
-		users := v1.Group("/users")
-		{
-			users.POST("", userHandler.CreateUser)
-			users.GET("", userHandler.GetAllUsers) // Supports ?type=tenant|admin|reference
-			users.GET("/:id", userHandler.GetUser)
-			users.PUT("/:id", userHandler.UpdateUser)
-			users.DELETE("/:id", userHandler.DeleteUser)
-		}
+		r.Route("/users", func(r chi.Router) {
+			respec.Meta(r).Tag("Users")
+			r.Post("/", respec.Handler(userHandler.CreateUser).Summary("Create a new user").Unwrap())
+			r.Get("/", respec.Handler(userHandler.GetAllUsers).Summary("Get all users").Unwrap())
+			r.Get("/{id}", respec.Handler(userHandler.GetUser).Summary("Get a single user").Unwrap())
+			r.Put("/{id}", respec.Handler(userHandler.UpdateUser).Summary("Update a user").Unwrap())
+			r.Delete("/{id}", respec.Handler(userHandler.DeleteUser).Summary("Delte a user").Unwrap())
+		})
 
 		// Contract routes
-		contracts := v1.Group("/contracts")
-		{
-			contracts.POST("", contractHandler.CreateContract)
-			contracts.GET("", contractHandler.GetAllContracts) // Supports ?tenantId=uuid
-			contracts.GET("/:id", contractHandler.GetContract)
-			contracts.PUT("/:id", contractHandler.UpdateContract)
-			contracts.DELETE("/:id", contractHandler.DeleteContract)
+		r.Route("/contracts", func(r chi.Router) {
+			respec.Meta(r).Tag("Contracts")
+			r.Post("/", respec.Handler(contractHandler.CreateContract).Summary("Create a new contract").Unwrap())
+			r.Get("/", respec.Handler(contractHandler.GetAllContracts).Summary("Get all contracts").Unwrap()) // Supports ?tenantId=uuid
+			r.Get("/{id}", respec.Handler(contractHandler.GetContract).Summary("Get a single contract").Unwrap())
+			r.Put("/{id}", respec.Handler(contractHandler.UpdateContract).Summary("Update a contract").Unwrap())
+			r.Delete("/{id}", respec.Handler(contractHandler.DeleteContract).Summary("Delte a contract").Unwrap())
 
 			// Contract version routes
-			contracts.POST("/versions", contractHandler.CreateContractVersion)
-			contracts.GET("/:id/versions", contractHandler.GetContractVersions)
+			r.Post("/versions", respec.Handler(contractHandler.CreateContractVersion).Summary("Create a new contract version").Unwrap())
+			r.Get("/{id}/versions", respec.Handler(contractHandler.GetContractVersions).Summary("Get all versions for a contract").Unwrap())
 
 			// Contract document routes
-			contracts.GET("/:id/document", contractHandler.GetContractDocument)
-		}
+			r.Get("/{id}/document", respec.Handler(contractHandler.GetContractDocument).Summary("Get the document for a contract").Unwrap())
+		})
 
 		// Statistics routes
-		statistics := v1.Group("/statistics")
-		{
-			statistics.GET("/overall", statisticsHandler.GetOverallStatistics)
-		}
-	}
-
-	// Health check endpoint
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"healthy": true,
+		r.Route("/statistics", func(r chi.Router) {
+			respec.Meta(r).Tag("Statistics")
+			r.Get("/overall", respec.Handler(statisticsHandler.GetOverallStatistics).Summary("Get the overall statistics").Unwrap())
 		})
 	})
 
-	router.GET("/scalar", func(c *gin.Context) {
+	// Health check endpoint
+	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"healthy": true}`))
+	})
+
+	router.Get("/scalar", func(w http.ResponseWriter, r *http.Request) {
 		htmlContent, err := scalar.ApiReferenceHTML(&scalar.Options{
 			SpecURL: "openapi.yaml",
 			CustomOptions: scalar.CustomOptions{
@@ -103,11 +108,14 @@ func Router(db *gorm.DB) *gin.Engine {
 
 		if err != nil {
 			fmt.Printf("%v", err)
-			c.String(http.StatusInternalServerError, "Error generating API reference")
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Error generating API reference"))
 			return
 		}
 
-		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(htmlContent))
 	})
 
 	return router

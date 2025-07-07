@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/edfloreshz/rent-contracts/src/services"
-	"github.com/gin-gonic/gin"
 )
 
 type StatisticsHandler struct {
@@ -17,12 +16,12 @@ func NewStatisticsHandler(statisticsService *services.StatisticsService) *Statis
 	}
 }
 
-func (h *StatisticsHandler) GetOverallStatistics(c *gin.Context) {
+func (h *StatisticsHandler) GetOverallStatistics(w http.ResponseWriter, r *http.Request) {
 	stats, err := h.statisticsService.GetOverallContractStatistics()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusInternalServerError, "Failed to retrieve overall statistics")
 		return
 	}
 
-	c.JSON(http.StatusOK, stats)
+	writeJSON(w, http.StatusOK, stats)
 }

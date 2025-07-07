@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 	"github.com/edfloreshz/rent-contracts/src/models"
 	"github.com/edfloreshz/rent-contracts/src/services"
 
-	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 )
 
@@ -22,16 +23,16 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) CreateUser(c *gin.Context) {
+func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateUserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	user, err := h.userService.CreateUser(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -52,20 +53,20 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		response.UpdatedAt = &updatedAt
 	}
 
-	c.JSON(http.StatusCreated, response)
+	writeJSON(w, http.StatusCreated, response)
 }
 
-func (h *UserHandler) GetUser(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	user, err := h.userService.GetUserByID(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -102,22 +103,23 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, response)
+	writeJSON(w, http.StatusOK, response)
 }
 
-func (h *UserHandler) GetAllUsers(c *gin.Context) {
-	userType := c.Query("type")
+func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	typeFilter := r.URL.Query().Get("type")
+
 	var users []models.User
 	var err error
 
-	if userType != "" {
-		users, err = h.userService.GetUsersByType(userType)
+	if typeFilter != "" {
+		users, err = h.userService.GetUsersByType(typeFilter)
 	} else {
 		users, err = h.userService.GetAllUsers()
 	}
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -159,26 +161,26 @@ func (h *UserHandler) GetAllUsers(c *gin.Context) {
 		responses = append(responses, response)
 	}
 
-	c.JSON(http.StatusOK, responses)
+	writeJSON(w, http.StatusOK, responses)
 }
 
-func (h *UserHandler) UpdateUser(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	var req dto.UpdateUserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	user, err := h.userService.UpdateUser(id, &req)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -199,22 +201,22 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		response.UpdatedAt = &updatedAt
 	}
 
-	c.JSON(http.StatusOK, response)
+	writeJSON(w, http.StatusOK, response)
 }
 
-func (h *UserHandler) DeleteUser(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	err = h.userService.DeleteUser(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusNoContent, nil)
+	w.WriteHeader(http.StatusNoContent)
 }

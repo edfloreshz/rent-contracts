@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 	"github.com/edfloreshz/rent-contracts/src/models"
 	"github.com/edfloreshz/rent-contracts/src/services"
 
-	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 )
 
@@ -22,16 +23,16 @@ func NewAddressHandler(addressService *services.AddressService) *AddressHandler 
 	}
 }
 
-func (h *AddressHandler) CreateAddress(c *gin.Context) {
+func (h *AddressHandler) CreateAddress(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateAddressRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	address, err := h.addressService.CreateAddress(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -53,20 +54,20 @@ func (h *AddressHandler) CreateAddress(c *gin.Context) {
 		response.UpdatedAt = &updatedAt
 	}
 
-	c.JSON(http.StatusCreated, response)
+	writeJSON(w, http.StatusOK, response)
 }
 
-func (h *AddressHandler) GetAddress(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *AddressHandler) GetAddress(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	address, err := h.addressService.GetAddressByID(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -88,11 +89,11 @@ func (h *AddressHandler) GetAddress(c *gin.Context) {
 		response.UpdatedAt = &updatedAt
 	}
 
-	c.JSON(http.StatusOK, response)
+	writeJSON(w, http.StatusOK, response)
 }
 
-func (h *AddressHandler) GetAllAddresses(c *gin.Context) {
-	typeFilter := c.Query("type")
+func (h *AddressHandler) GetAllAddresses(w http.ResponseWriter, r *http.Request) {
+	typeFilter := r.URL.Query().Get("type")
 
 	var addresses []models.Address
 	var err error
@@ -106,7 +107,7 @@ func (h *AddressHandler) GetAllAddresses(c *gin.Context) {
 	}
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -133,26 +134,26 @@ func (h *AddressHandler) GetAllAddresses(c *gin.Context) {
 		responses = append(responses, response)
 	}
 
-	c.JSON(http.StatusOK, responses)
+	writeJSON(w, http.StatusOK, responses)
 }
 
-func (h *AddressHandler) UpdateAddress(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *AddressHandler) UpdateAddress(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	var req dto.UpdateAddressRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	address, err := h.addressService.UpdateAddress(id, &req)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -174,22 +175,22 @@ func (h *AddressHandler) UpdateAddress(c *gin.Context) {
 		response.UpdatedAt = &updatedAt
 	}
 
-	c.JSON(http.StatusOK, response)
+	writeJSON(w, http.StatusOK, response)
 }
 
-func (h *AddressHandler) DeleteAddress(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *AddressHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	err = h.addressService.DeleteAddress(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusNoContent, nil)
+	w.WriteHeader(http.StatusNoContent)
 }

@@ -6,6 +6,7 @@ build:
 
 # Run the application
 run:
+	respec . -o openapi.yaml
 	go run src/main.go
 
 # Install dependencies

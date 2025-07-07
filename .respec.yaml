@@ -1,0 +1,40 @@
+# .respec.yaml - Configuration for the respec OpenAPI generator
+
+# High-level information for your OpenAPI specification.
+info:
+  title: "Rent Contracts API"
+  version: "1.0.0"
+  description: "API for managing rental contracts, addresses, users, and contract versions."
+
+# Defines the security mechanisms your API uses (e.g., JWT, API Keys).
+# securitySchemes:
+#   BearerAuth:
+#     type: http
+#     scheme: bearer
+#     bearerFormat: JWT
+
+# Teaches respec the routing syntax of your web framework.
+# Defaults for chi/v5 and gin-gonic/gin are built-in.
+# Only uncomment and modify this section if you use a different framework.
+# routerDefinitions:
+#   - type: "github.com/go-chi/chi/v5.Mux"
+#     endpointMethods: ["Get", "Post", "Put", "Patch", "Delete", "Head", "Options", "Trace"]
+#     groupMethods: ["Route", "Group"]
+#     middlewareWrapperMethods: ["With", "Use"]
+
+# Teaches respec to infer details from your project's custom helper functions.
+# Defaults for the standard library and common frameworks are built-in.
+# handlerPatterns:
+#   requestBody:
+#     - functionPath: "path/to/my/utils.BindRequest"
+#       argIndex: 0
+#   responseBody:
+#     - functionPath: "path/to/my/utils.RespondWithJSON"
+#       statusCodeIndex: 1
+#       dataIndex: 2
+#       descriptionIndex: -1 # Use -1 if no description argument
+
+# Maps function calls found in middleware to the security schemes defined above.
+# securityPatterns:
+#   - functionPath: "path/to/my/auth.ValidateToken"
+#     schemeName: "BearerAuth"

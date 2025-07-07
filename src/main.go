@@ -1,11 +1,13 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/edfloreshz/rent-contracts/src/config"
 	"github.com/edfloreshz/rent-contracts/src/database"
 	"github.com/edfloreshz/rent-contracts/src/routes"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 func main() {
@@ -29,7 +31,7 @@ func main() {
 	port := config.GetEnv("PORT", "8080")
 
 	log.Printf("Server starting on port %s", port)
-	if err := router.Run(":" + port); err != nil {
+	if err := http.ListenAndServe(":"+port, router); err != nil {
 		log.Fatal("Failed to start server: ", err)
 	}
 }

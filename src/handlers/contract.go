@@ -1,14 +1,15 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
 	"github.com/edfloreshz/rent-contracts/src/dto"
 	"github.com/edfloreshz/rent-contracts/src/models"
 	"github.com/edfloreshz/rent-contracts/src/services"
+	"github.com/go-chi/chi/v5"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
@@ -22,16 +23,16 @@ func NewContractHandler(contractService *services.ContractService) *ContractHand
 	}
 }
 
-func (h *ContractHandler) CreateContract(c *gin.Context) {
+func (h *ContractHandler) CreateContract(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateContractRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	contract, err := h.contractService.CreateContract(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -50,36 +51,36 @@ func (h *ContractHandler) CreateContract(c *gin.Context) {
 		response.UpdatedAt = &updatedAt
 	}
 
-	c.JSON(http.StatusCreated, response)
+	writeJSON(w, http.StatusCreated, response)
 }
 
-func (h *ContractHandler) GetContract(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *ContractHandler) GetContract(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	contract, err := h.contractService.GetContractByID(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	response := h.buildContractResponse(contract)
-	c.JSON(http.StatusOK, response)
+	writeJSON(w, http.StatusCreated, response)
 }
 
-func (h *ContractHandler) GetAllContracts(c *gin.Context) {
-	tenantIDStr := c.Query("tenantId")
+func (h *ContractHandler) GetAllContracts(w http.ResponseWriter, r *http.Request) {
+	tenantIDStr := r.URL.Query().Get("tenantId")
 	var contracts []models.Contract
 	var err error
 
 	if tenantIDStr != "" {
 		tenantID, parseErr := uuid.Parse(tenantIDStr)
 		if parseErr != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid tenant UUID"})
+			writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 			return
 		}
 		contracts, err = h.contractService.GetContractsByTenant(tenantID)
@@ -88,7 +89,7 @@ func (h *ContractHandler) GetAllContracts(c *gin.Context) {
 	}
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -98,78 +99,78 @@ func (h *ContractHandler) GetAllContracts(c *gin.Context) {
 		responses = append(responses, *response)
 	}
 
-	c.JSON(http.StatusOK, responses)
+	writeJSON(w, http.StatusOK, responses)
 }
 
-func (h *ContractHandler) UpdateContract(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *ContractHandler) UpdateContract(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	var req dto.UpdateContractRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	contract, err := h.contractService.UpdateContract(id, &req)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	response := h.buildContractResponse(contract)
-	c.JSON(http.StatusOK, response)
+	writeJSON(w, http.StatusCreated, response)
 }
 
-func (h *ContractHandler) DeleteContract(c *gin.Context) {
-	idStr := c.Param("id")
+func (h *ContractHandler) DeleteContract(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	err = h.contractService.DeleteContract(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusNoContent, nil)
+	w.WriteHeader(http.StatusNoContent)
 }
 
-func (h *ContractHandler) CreateContractVersion(c *gin.Context) {
+func (h *ContractHandler) CreateContractVersion(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateContractVersionRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	version, err := h.contractService.CreateContractVersion(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
 	response := h.buildContractVersionResponse(version)
-	c.JSON(http.StatusCreated, response)
+	writeJSON(w, http.StatusCreated, response)
 }
 
-func (h *ContractHandler) GetContractVersions(c *gin.Context) {
-	contractIDStr := c.Param("id")
+func (h *ContractHandler) GetContractVersions(w http.ResponseWriter, r *http.Request) {
+	contractIDStr := chi.URLParam(r, "id")
 	contractID, err := uuid.Parse(contractIDStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid contract UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	versions, err := h.contractService.GetContractVersionsByContractID(contractID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -179,24 +180,24 @@ func (h *ContractHandler) GetContractVersions(c *gin.Context) {
 		responses = append(responses, *response)
 	}
 
-	c.JSON(http.StatusOK, responses)
+	writeJSON(w, http.StatusOK, responses)
 }
 
-func (h *ContractHandler) GetContractDocument(c *gin.Context) {
-	contractIDStr := c.Param("id")
+func (h *ContractHandler) GetContractDocument(w http.ResponseWriter, r *http.Request) {
+	contractIDStr := chi.URLParam(r, "id")
 	contractID, err := uuid.Parse(contractIDStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid contract UUID"})
+		writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 		return
 	}
 
 	// Get optional version ID from query parameters
-	versionIDStr := c.Query("versionId")
+	versionIDStr := r.URL.Query().Get("versionId")
 	var versionID *uuid.UUID
 	if versionIDStr != "" {
 		parsedVersionID, err := uuid.Parse(versionIDStr)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid version UUID"})
+			writeJSONError(w, http.StatusBadRequest, "Invalid UUID")
 			return
 		}
 		versionID = &parsedVersionID
@@ -204,11 +205,13 @@ func (h *ContractHandler) GetContractDocument(c *gin.Context) {
 
 	document, err := h.contractService.GetContractDocument(contractID, versionID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		writeJSONError(w, http.StatusNotFound, err.Error())
 		return
 	}
 
-	c.Data(http.StatusOK, "application/pdf", document)
+	w.Header().Set("Content-Type", "application/pdf")
+	w.WriteHeader(http.StatusOK)
+	w.Write(document)
 }
 
 func (h *ContractHandler) buildContractResponse(contract *models.Contract) *dto.ContractResponse {

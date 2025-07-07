@@ -95,6 +95,7 @@ func (s *ContractService) GetAllContracts() ([]models.Contract, error) {
 		Preload("Tenant").
 		Preload("Tenant.Address").
 		Preload("Address").
+		Preload("Versions").
 		Find(&contracts).Error; err != nil {
 		return nil, err
 	}
@@ -109,6 +110,7 @@ func (s *ContractService) GetContractsByTenant(tenantID uuid.UUID) ([]models.Con
 		Preload("Tenant").
 		Preload("Tenant.Address").
 		Preload("Address").
+		Preload("Versions").
 		Where("tenantid = ?", tenantID).
 		Find(&contracts).Error; err != nil {
 		return nil, err
