@@ -46,7 +46,7 @@ export default function Dashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat) => (
-                    <div key={stat.name} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <div key={stat.name} className="bg-white dark:bg-zinc-800 rounded-lg shadow p-6">
                         <div className="flex items-center">
                             <div className={`p-3 rounded-full ${stat.color} text-white mr-4`}>
                                 <span className="text-xl">{stat.icon}</span>
@@ -62,7 +62,7 @@ export default function Dashboard() {
 
             {/* Comprehensive Statistics */}
             {statistics && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg shadow p-6">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
                         {t('dashboard.detailedStatistics')}
                     </h3>
@@ -155,13 +155,13 @@ export default function Dashboard() {
             )}
 
             {/* Recent Contracts */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="bg-white dark:bg-zinc-800 rounded-lg shadow">
                 <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('dashboard.recentContracts')}</h3>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className="bg-gray-50 dark:bg-gray-700">
+                        <thead className="bg-gray-50 dark:bg-zinc-700">
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                     {t('dashboard.tenant')}
@@ -177,7 +177,7 @@ export default function Dashboard() {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody className="bg-white dark:bg-zinc-800 divide-y divide-gray-200 dark:divide-gray-700">
                             {contracts.slice(0, 5).map((contract: Contract) => (
                                 <tr key={contract.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -206,7 +206,7 @@ export default function Dashboard() {
                                             ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                                             : contract.currentVersion?.status === ContractStatus.Expired
                                                 ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                                                : 'bg-gray-100 dark:bg-zinc-700 text-gray-800 dark:text-gray-200'
                                             }`}>
                                             {t(`contracts.statuses.${contract.currentVersion?.status}`)}
                                         </span>

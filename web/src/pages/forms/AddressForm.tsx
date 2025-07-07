@@ -79,7 +79,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 w-full max-w-md">
                 <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
                     {address ? t('addresses.editAddress') : t('addresses.addNewAddress')}
                 </h2>
@@ -92,7 +92,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('street', { required: t('addresses.streetRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.street && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.street.message}</p>
@@ -106,7 +106,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('number', { required: t('addresses.numberRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.number && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.number.message}</p>
@@ -120,7 +120,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('neighborhood', { required: t('addresses.neighborhoodRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.neighborhood && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.neighborhood.message}</p>
@@ -134,7 +134,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('city', { required: t('addresses.cityRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.city && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.city.message}</p>
@@ -148,7 +148,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('state', { required: t('addresses.stateRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.state && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.state.message}</p>
@@ -162,7 +162,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('zipCode', { required: t('addresses.zipCodeRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.zipCode && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.zipCode.message}</p>
@@ -176,7 +176,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <input
                             type="text"
                             {...register('country', { required: t('addresses.countryRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.country && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.country.message}</p>
@@ -189,7 +189,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         </label>
                         <select
                             {...register('type', { required: t('addresses.typeRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         >
                             <option value={AddressType.Property}>{t('addresses.types.property')}</option>
                             <option value={AddressType.Tenant}>{t('addresses.types.tenant')}</option>
@@ -203,7 +203,7 @@ export default function AddressForm({ address, onClose }: AddressFormProps) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-zinc-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
                         >
                             {t('common.cancel')}
                         </button>

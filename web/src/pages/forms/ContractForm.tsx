@@ -130,7 +130,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
                     {contract ? t('contracts.editContract') : t('contracts.addNewContract')}
                 </h2>
@@ -143,7 +143,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             </label>
                             <select
                                 {...register('landlordId', { required: t('contracts.landlordRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             >
                                 <option value="">{t('contracts.selectLandlord')}</option>
                                 {landlords.map((landlord) => (
@@ -163,7 +163,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             </label>
                             <select
                                 {...register('tenantId', { required: t('contracts.tenantRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             >
                                 <option value="">{t('contracts.selectTenant')}</option>
                                 {tenants.map((tenant) => (
@@ -183,7 +183,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             </label>
                             <select
                                 {...register('addressId', { required: t('contracts.propertyRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             >
                                 <option value="">{t('contracts.selectProperty')}</option>
                                 {addresses.map((address) => (
@@ -205,7 +205,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                                 type="number"
                                 step="0.01"
                                 {...register('rent', { required: t('contracts.rentRequired'), min: 0 })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             />
                             {errors.rent && (
                                 <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.rent.message}</p>
@@ -220,7 +220,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                                 type="number"
                                 step="0.01"
                                 {...register('rentIncreasePercentage', { required: 'Rent increase percentage is required', min: 0, max: 100 })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             />
                             {errors.rentIncreasePercentage && (
                                 <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.rentIncreasePercentage.message}</p>
@@ -235,7 +235,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                                 type="number"
                                 step="0.01"
                                 {...register('deposit', { required: t('contracts.depositRequired'), min: 0 })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             />
                             {errors.deposit && (
                                 <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.deposit.message}</p>
@@ -249,7 +249,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             <input
                                 type="text"
                                 {...register('business', { required: t('contracts.businessRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                                 placeholder="e.g., Residential, Commercial"
                             />
                             {errors.business && (
@@ -263,7 +263,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             </label>
                             <select
                                 {...register('type', { required: t('contracts.typeRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             >
                                 <option value={ContractType.Yearly}>{t('contracts.types.Yearly')}</option>
                             </select>
@@ -279,7 +279,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             <input
                                 type="date"
                                 {...register('startDate', { required: t('contracts.startDateRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             />
                             {errors.startDate && (
                                 <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.startDate.message}</p>
@@ -293,7 +293,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             <input
                                 type="date"
                                 {...register('endDate', { required: t('contracts.endDateRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             />
                             {errors.endDate && (
                                 <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.endDate.message}</p>
@@ -307,7 +307,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             <input
                                 type="date"
                                 {...register('renewalDate')}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             />
                         </div>
 
@@ -317,7 +317,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                             </label>
                             <select
                                 {...register('status', { required: t('contracts.statusRequired') })}
-                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             >
                                 <option value={ContractStatus.Active}>{t('contracts.statuses.active')}</option>
                                 <option value={ContractStatus.Expired}>{t('contracts.statuses.expired')}</option>
@@ -336,7 +336,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                         <textarea
                             {...register('specialTerms')}
                             rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                             placeholder="Enter any special terms or conditions..."
                         />
                     </div>
@@ -364,7 +364,7 @@ export default function ContractForm({ contract, onClose }: ContractFormProps) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-zinc-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
                         >
                             {t('common.cancel')}
                         </button>

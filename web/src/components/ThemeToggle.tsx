@@ -46,21 +46,21 @@ export default function ThemeToggle() {
         <div className="relative inline-block text-left">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-center w-10 h-10 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="flex items-center justify-center w-10 h-10 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 aria-label={`Current theme: ${currentTheme.name}. Click to change theme.`}
             >
                 {currentTheme.icon}
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-10">
+                <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-10">
                     {themeOptions.map((option) => (
                         <button
                             key={option.value}
                             onClick={() => handleThemeChange(option.value)}
                             className={`w-full flex items-center px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors ${option.value === theme
-                                    ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                                    : 'text-gray-700 dark:text-gray-300'
+                                ? 'bg-blue-50 dark:bg-zinc-900 text-blue-700 dark:text-blue-300'
+                                : 'text-gray-700 dark:text-gray-300'
                                 }`}
                         >
                             <span className="mr-2">{option.icon}</span>

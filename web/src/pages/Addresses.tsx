@@ -85,7 +85,7 @@ export default function Addresses() {
                     onClick={() => setFilter('all')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'all'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        : 'bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.all')}
@@ -94,7 +94,7 @@ export default function Addresses() {
                     onClick={() => setFilter('tenant')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'tenant'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        : 'bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.tenant')}
@@ -103,7 +103,7 @@ export default function Addresses() {
                     onClick={() => setFilter('property')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'property'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        : 'bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.property')}
@@ -112,7 +112,7 @@ export default function Addresses() {
                     onClick={() => setFilter('reference')}
                     className={`px-4 py-2 rounded-lg font-medium ${filter === 'reference'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        : 'bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                 >
                     {t('addresses.filters.reference')}
@@ -130,7 +130,7 @@ export default function Addresses() {
             {addresses && addresses.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {addresses.map((address: Address) => (
-                        <div key={address.id} className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                        <div key={address.id} className="bg-white dark:bg-zinc-800 rounded-lg shadow overflow-hidden">
                             {/* Map Preview */}
                             <MapPreview address={address} className="w-full" />
 
@@ -152,7 +152,7 @@ export default function Addresses() {
                                         </p>
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-2 ${address.type === AddressType.Property
                                             ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-                                            : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                                            : 'bg-blue-100 dark:bg-zinc-900 text-blue-800 dark:text-blue-200'
                                             }`}>
                                             {t(`addresses.types.${address.type}`)}
                                         </span>

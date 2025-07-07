@@ -49,9 +49,9 @@ export default function Tenants() {
             </div>
 
             {/* Tenants Table */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <div className="bg-white dark:bg-zinc-800 rounded-lg shadow overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
+                    <thead className="bg-gray-50 dark:bg-zinc-700">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 {t('common.name')}
@@ -70,7 +70,7 @@ export default function Tenants() {
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody className="bg-white dark:bg-zinc-800 divide-y divide-gray-200 dark:divide-gray-700">
                         {tenants.map((tenant: User) => (
                             <tr key={tenant.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">

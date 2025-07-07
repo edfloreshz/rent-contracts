@@ -73,7 +73,7 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 w-full max-w-md">
                 <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
                     {reference ? t('references.editReference') : t('references.addNewReference')}
                 </h2>
@@ -86,7 +86,7 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
                         <input
                             type="text"
                             {...register('firstName', { required: t('references.nameRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.firstName && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.firstName.message}</p>
@@ -106,7 +106,7 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
                                     message: t('common.invalidEmail')
                                 }
                             })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.email && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.email.message}</p>
@@ -120,7 +120,7 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
                         <input
                             type="tel"
                             {...register('phone', { required: t('references.phoneRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         />
                         {errors.phone && (
                             <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.phone.message}</p>
@@ -133,7 +133,7 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
                         </label>
                         <select
                             {...register('addressId', { required: t('references.addressRequired') })}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
                         >
                             <option value="">{t('references.selectAddress')}</option>
                             {addresses.map((address) => (
@@ -151,7 +151,7 @@ export default function ReferenceForm({ reference, onClose }: ReferenceFormProps
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+                            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-zinc-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
                         >
                             {t('common.cancel')}
                         </button>

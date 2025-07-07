@@ -50,7 +50,7 @@ export default function MapPreview({ address, className = '' }: MapPreviewProps)
     if (showFullMap) {
         return (
             <div className={`relative ${className}`}>
-                <div className="relative w-full h-64 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div className="relative w-full h-64 bg-gray-100 dark:bg-zinc-700 rounded-lg overflow-hidden">
                     <iframe
                         src={googleMapsUrl}
                         width="100%"
@@ -67,7 +67,7 @@ export default function MapPreview({ address, className = '' }: MapPreviewProps)
                     {/* Close button */}
                     <button
                         onClick={handleMapClick}
-                        className="absolute top-2 right-2 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full p-1 shadow-md"
+                        className="absolute top-2 right-2 bg-white dark:bg-zinc-800 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full p-1 shadow-md"
                         title="Close map"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +90,7 @@ export default function MapPreview({ address, className = '' }: MapPreviewProps)
 
     return (
         <div className={`relative ${className}`}>
-            <div className="relative w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden cursor-pointer" onClick={handleMapClick}>
+            <div className="relative w-full h-32 bg-gray-100 dark:bg-zinc-700 rounded-lg overflow-hidden cursor-pointer" onClick={handleMapClick}>
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -122,7 +122,7 @@ export default function MapPreview({ address, className = '' }: MapPreviewProps)
 
                 {/* Overlay to make it clickable */}
                 <div className="absolute inset-0 bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-200 flex items-center justify-center">
-                    <div className="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs opacity-0 hover:opacity-100 transition-opacity duration-200">
+                    <div className="bg-white dark:bg-zinc-800 bg-opacity-90 dark:bg-opacity-90 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs opacity-0 hover:opacity-100 transition-opacity duration-200">
                         Click to expand
                     </div>
                 </div>
