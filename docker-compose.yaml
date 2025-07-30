@@ -41,3 +41,10 @@ services:
       db:
         condition: service_healthy
     restart: unless-stopped
+  web:
+    container_name: rent-contracts-web
+    build:
+      context: web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:5173"
